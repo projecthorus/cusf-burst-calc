@@ -3,36 +3,21 @@ function get_value(id) {
 }
 
 function clear_errors() {
-    var ids = ['mp', 'tar', 'tba', 'rho_g', 'rho_a', 'adm', 'bd', 'cd',
-        'bd_c', 'cd_c'];
-
-    for(var i in ids) {
-        document.getElementById(ids[i]).style.backgroundColor = '';
-    }
-
-    var ids = ['mp_w', 'mb_w', 'tar_w', 'tba_w'];
-    for(i in ids) {
-        document.getElementById(ids[i]).innerHTML = '&nbsp;';
-    }
-}
-
-function show_error(id) {
-    document.getElementById(id).style.backgroundColor = '#f99';
+    $("#result").removeClass('error').text('Result');
 }
 
 function set_error(id, error) {
-    show_error(id);
-    document.getElementById(id+"_w").innerHTML = error;
+    $("#result").addClass('error').text(error);
 }
 
 function sanity_check_inputs(mb, mp, mp_set, tar, tba, tar_set, tba_set) {
     if(tar_set && tba_set) {
-        set_error('tar', "Can't specify both!");
-        set_error('tba', "Can't specify both!");
+        set_error('tar', "Specify either target burst altitude or target ascent rate!");
+        set_error('tba', "Specify either target burst altitude or target ascent rate!");
         return 1;
     } else if(!tar_set && !tba_set) {
-        set_error('tar', "Must specify at least one!");
-        set_error('tba', "Must specify at least one!");
+        set_error('tar', "Must specify at least one target!");
+        set_error('tba', "Must specify at least one target!");
         return 1;
     }
 
@@ -162,18 +147,9 @@ function find_bd(mb) {
     // https://sites.google.com/site/balloonnewswebstore/1200g-balloon-data
     bds["p1200"] = 8.0;
 
- 
-    var bd_c = document.getElementById('bd_c').checked;
-    var bd;
-
-    if(bd_c) {
-        bd = get_value('bd');
-        document.getElementById('bd').disabled = "";
-    } else {
-        bd = bds[mb];
-        document.getElementById('bd').disabled = "disabled";
-        document.getElementById('bd').value = bd;
-    }
+    
+    if($('#bd_c:checked').length) bd = get_value('bd');
+    else bd = bds[$('#mb').val()];
 
     return bd;
 }
@@ -213,18 +189,8 @@ function find_cd(mb) {
     // PAWAN data also guesswork
     cds["p1200"] = 0.25;
 
-    var cd_c = document.getElementById('cd_c').checked;
-    var cd;
-
-    if(cd_c) {
-        cd = get_value('cd');
-        document.getElementById('cd').disabled = "";
-    } else {
-        cd = cds[mb];
-        document.getElementById('cd').disabled = "disabled";
-        document.getElementById('cd').value = cd;
-    }
-
+    if($('#cd_c:checked').length) cd = get_value('cd');
+    else cd = cds[$('#mb').val()];
     return cd;
 }
 
@@ -366,38 +332,94 @@ function calc_update() {
     document.getElementById('lv_cf').innerHTML = launch_cf + " ft<sup>3</sup>";
 }
 
-function show_help() {
-    hide_about();
-    document.getElementById('helpbox').style.visibility = 'visible';
-    return false;
-}
 
-function show_about() {
-    hide_help();
-    document.getElementById('aboutbox').style.visibility = 'visible';
-    return false;
-}
+$(document).ready(function() {
+    // init page title
+    $('#page_title').text("ballon burst calculator");
+    $('#page_subtitle').html("<a href='#'>About</a> | <a href='#'>Help</a>");
 
-function hide_help() {
-    document.getElementById('helpbox').style.visibility = 'hidden';
-    return false;
-}
+    // open about/help boxes
+    $('#page_subtitle a').click(function() {
+        var name = '#' + $(this).text().toLowerCase() + 'box';
+        $('section>div:visible').fadeOut('fast', function() {
+            $(name).fadeIn();
+        });
+        return false;
+    });
+    
+    // transition between about/help box to calc
+    $('#aboutbox .close, #helpbox .close').click(function() {
+        $('section>div:visible').fadeOut('fast', function() {
+            $('#calcbox').fadeIn();
+         });
+        return false;
+    });
 
-function hide_about() {
-    document.getElementById('aboutbox').style.visibility = 'hidden';
-    return false;
-}
+    // expands Constants and scrolls the page
+    $('.fourth.closed').click(function() {
+        var e = $(this).unbind('click');
+        var time = 0;
+        e.find('.column:not(:visible)').each(function(i,k) {
+            $(k).delay(time).fadeIn();
+            time += 250;
+        });
+        e.removeClass('closed');
 
-function calc_init() {
+        // swing scroll expanded constants into view
+        $('html,body').animate({
+            scrollTop: e.offset().top 
+        }, {duraton: 1000, easing: 'swing'});
+    });
 
-    document.getElementById('showhelp').onclick = show_help;
-    document.getElementById('showabout').onclick = show_about;
-    document.getElementById('hidehelp').onclick = hide_help;
-    document.getElementById('hideabout').onclick = hide_about;
+    // validate input fields, numeric only
+    $('input.numeric').keypress(function(event) {
+        if(event.which == 0 // arrows and other essential keys
+           || event.which == 8 // backspace
+           || event.which == 46 // '.'
+           || (event.which >= 48 && event.which <= 57) // numbers 0-9
+           ) return;
+        event.preventDefault();
+        
+        $(this).stop(true,true).css({'background-color':'#FE727C'}).delay(50).animate({backgroundColor: 'white'}, 100);
+    });
 
+    // adjust input field value with mousewheel
+    $('input.scrollable').bind('mousewheel', function(event, delta) {
+        event.preventDefault();
+        var elm = $(this);
+        var x = parseFloat(elm.val());
+        if(isNaN(x)) return false;
+        // different fields can use different step value
+        // step value has to be defined on the element by 'rel' attribute
+        var step = parseFloat(elm.attr('rel'));
+        if(isNaN(step)) step = 5;
+
+        x = x + (step * delta);
+        if(x <= 0) return; // no numbers bellow zero
+
+        x = Math.round(x*100)/100; //round to two decimal places
+
+        elm.val(x);      
+        elm.change(); // calculate result
+   
+        return false;
+    });
+
+    // enable disabled constants
+    $('#bd_c, #cd_c').click(function() {
+        if($('#bd_c:checked').length) $('#bd').removeAttr('disabled');
+        else $('#bd').attr('disabled', 'disabled');
+
+        if($('#cd_c:checked').length) $('#cd').removeAttr('disabled');
+        else $('#cd').attr('disabled', 'disabled');
+    });
+
+    // calculate result on change
     var ids = ['mb', 'mp', 'tar', 'tba', 'gas', 'rho_g', 'rho_a', 'adm', 'bd', 'cd', 'bd_c', 'cd_c'];
-    for(var i in ids) {
-        document.getElementById(ids[i]).onchange = calc_update;
-    }
+
+    $('#' + ids.join(", #")).bind('keyup change',function() {
+        calc_update();
+    });
+
     calc_update();
-}
+});

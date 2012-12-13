@@ -1,26 +1,50 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
     <head>
-        <title>CUSF Balloon Burst Calculator</title>
-        <link href="style.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="calc.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>habitat burst calculator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+        <link rel="stylesheet" href="t/css/base.css"/>
+        <link rel="stylesheet" href="t/css/skeleton.css"/>
+        <link rel="stylesheet" href="t/css/layout.css"/>
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link rel="shortcut icon" href="t/images/favicon.ico" />
+        <link rel="stylesheet" href="css/burstcalc.css"/>
+        <script type="text/javascript" src="js/jquery-1.8.3-min.js"></script>
+        <script type="text/javascript" src="js/jquery-color.js"></script>
+        <script type="text/javascript" src="js/jquery-mousewheel.js"></script>
+        <script type="text/javascript" src="js/calc.js"></script>
     </head>
-    <body onload="calc_init();">
-        <div id="header">
-            <div id="title">
-                <h1>CUSF Balloon Burst Calculator</h1>
-                <noscript>
-                    <div id="noscript">Javascript is required! This won't work at all without it.</div>
-                </noscript>
+    <body>
+    <header>
+        <div class="container">
+            <div class="sixteen columns">
+                <h1 class="no-margin">
+                    <a href="http://habhub.org/" alt="habitat">
+                        <img src="t/images/header_logo.png" alt="habitat" title="habitat"/>
+                    </a>
+                </h1>
+                <span id="app_name"><b>burstcalc</b></span>
             </div>
-            <div id="menu">
-                <a href="#" id="showhelp">Help</a> | <a href="#" id="showabout">About</a>
-            </div>
-            <div class="clear"></div>
         </div>
-        <div id="helpbox">
+    </header>
+    <div id="grey-section">
+        <div class="container">
+            <div class="two-thirds column">
+                <h3 class="remove-bottom" id="page_title">Loading...</h3>
+                <p class="remove-bottom" id="page_subtitle">If you can read this, the javascript isn't working :-(.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <section id="main" class="container">
+        <div id="helpbox" class="thirteen column" style="display: none">
             <h2>Help</h2>
             <p>
                 This calculator is designed to help you find how much gas to put into a high altitude balloon
@@ -41,10 +65,11 @@
                 appropriate value for your selected balloon will be used.
             </p>
             <p>
-                <a href="#" id="hidehelp">Close</a>
+                <a href="#" class="close">Close</a>
             </p>
         </div>
-        <div id="aboutbox">
+
+        <div id="aboutbox" class="thirteen column" style="display: none">
             <h2>About</h2>
             <p>
                 Cambridge University Space Flight: Balloon Burst Calculator
@@ -55,7 +80,8 @@
             </p>
             <p>
                 Written by Adam Greig for CUSF in March 2010. Maths derived from `burst1a` spreadsheet by
-                Steve Randall. Balloon information from Kaymont Totex sounding balloon data.
+                Steve Randall. Balloon information from Kaymont Totex sounding balloon data. Rewritten  by
+                Rossen Georgiev in 2012 for <a href="http://habhub.org">Habhub.org</a>.
             </p>
             <p>
                 No guarantee is given for the accuracy of any data included or produced by this program, use
@@ -65,132 +91,109 @@
                 Copyright 2010 Cambridge University Space Flight
             </p>
             <p>
-                <a href="#" id="hideabout">Close</a>
+                <a href="#" class="close">Close</a>
             </p>
         </div>
-        <div id="content">
-            <div id="ui">
-                    <table id="input_table">
-                        <tr class="input_row">
-                            <td class="input_label" colspan="2">Payload Mass (g)</td>
-                            <td class="input_instruction" rowspan="3">AND</td>
-                            <td class="input_label" colspan="2">Balloon Mass (g)</td>
-                        </tr>
-                        <tr class="input_row">
-                            <td colspan="2">
-                                <input type="text" id="mp" class="input_field" value="1500" tabindex="1"/>
-                            </td>
-                            <td colspan="2">
-                                <select class="input_field" id="mb" tabindex="2">
-                                    <option value="k200">Kaymont - 200</option>
-                                    <option value="k300">Kaymont - 300</option>
-                                    <option value="k350">Kaymont - 350</option>
-                                    <option value="k450">Kaymont - 450</option>
-                                    <option value="k500">Kaymont - 500</option>
-                                    <option value="k600">Kaymont - 600</option>
-                                    <option value="k700">Kaymont - 700</option>
-                                    <option value="k800">Kaymont - 800</option>
-                                    <option value="k1000" selected="selected">Kaymont - 1000</option>
-                                    <option value="k1200">Kaymont - 1200</option>
-                                    <option value="k1500">Kaymont - 1500</option>
-                                    <option value="k2000">Kaymont - 2000</option>
-                                    <option value="k3000">Kaymont - 3000</option>
-                                    <option value="h200">Hwoyee - 200</option>
-                                    <option value="h300">Hwoyee - 300</option>
-                                    <option value="h350">Hwoyee - 350</option>
-                                    <option value="h450">Hwoyee - 400</option>
-                                    <option value="h500">Hwoyee - 500</option>
-                                    <option value="h600">Hwoyee - 600</option>
-                                    <option value="h700">Hwoyee - 750</option>
-                                    <option value="h800">Hwoyee - 800</option>
-                                    <option value="h800">Hwoyee - 950</option>
-                                    <option value="h1000">Hwoyee - 1000</option>
-                                    <option value="h1200">Hwoyee - 1200</option>
-                                    <option value="h1500">Hwoyee - 1500</option>
-                                    <option value="h1600">Hwoyee - 1600</option>
-                                    <option value="h2000">Hwoyee - 2000</option>
-                                    <option value="p1200">PAWAN - 1200</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr class="warning_row">
-                            <td colspan="2" id="mp_w">&nbsp;</td>
-                            <td colspan="2" id="mb_w">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td class="input_instruction" colspan="5">THEN</td>
-                        </tr>
-                        <tr class="input_row">
-                            <td class="input_label" colspan="2">Target Burst Altitude (m)</td>
-                            <td class="input_instruction" rowspan="3">OR</td>
-                            <td class="input_label" colspan="2">Target Ascent Rate (m/s)</td>
-                        </tr>
-                        <tr class="input_row">
-                            <td colspan="2">
-                                <input type="text" id="tba" class="input_field" value="33000" tabindex="3"/>
-                            </td>
-                            <td colspan="2">
-                                <input type="text" id="tar" class="input_field" tabindex="4"/>
-                            </td>
-                        </tr>
-                        <tr class="warning_row">
-                            <td id="tba_w" colspan="2">&nbsp;</td>
-                            <td id="tar_w" colspan="2">&nbsp;</td>
-                        </tr>
-                        <tr class="input_instruction" style="font-size: 2em;">
-                            <td colspan="5">&darr;</td>
-                        </tr>
-                        <tr class="output_row">
-                            <td class="output_label">Burst Altitude:</td>
-                            <td class="output_data" id="ba">33000 m</td>
-                            <td></td>
-                            <td class="output_label">Ascent Rate:</td>
-                            <td class="output_data" id="ar">2.33 m/s</td>
-                        </tr>
-                        <tr class="output_row">
-                            <td class="output_label">Time to Burst:</td>
-                            <td class="output_data" id="ttb">238 min</td>
-                            <td></td>
-                            <td class="output_label">Neck Lift:</td>
-                            <td class="output_data" id="nl">1733 g</td>
-                        </tr>
-                        <tr class="output_row">
-                            <td class="output_label">Launch Volume:</td>
-                            <td class="output_data" id="lv_m3">2.66 m<sup>3</sup></td>
-                            <td></td>
-                            <td class="output_data" id="lv_l">2660 L</td>
-                            <td class="output_data" id="lv_cf">93.9 ft<sup>3</sup></td>
-                        </tr>
-                    </table>
-            </div>
-            <div id="constants">
-                <div class="constants_header">Constants</div><br />
-                <div class="constants_warning">
-                    For advanced<br />use only!<br /><br />
-                    You can probably<br />leave these alone.<br />
-                </div><br />
-                <label class="constant_label" for="gas">Gas</label><br />
-                <select id="gas" class="constant_field">
-                    <option value="he">Helium</option>
-                    <option value="h">Hydrogen</option>
-                    <option value="ch4">Methane</option>
-                    <option value="custom">Custom</option>
-                </select><br />
-                <label class="constant_label" for="rho_g">Gas Density (kg/m<sup>3</sup>)</label><br />
-                <input type="text" id="rho_g" value="0.1786" class="constant_field" size="9" disabled="disabled"/><br />
-                <label class="constant_label" for="rho_a">Air Density (kg/m<sup>3</sup>)</label><br />
-                <input type="text" id="rho_a" value="1.2050" class="constant_field" size="9"/><br />
-                <label class="constant_label" for="adm">Air Density Model</label><br />
-                <input type="text" id="adm" value="7238.3" class="constant_field" size="9"/><br />
-                <label class="constant_label" for="ga">Gravitational<br />Acceleration (m/s<sup>2</sup>)</label><br />
-                <input type="text" id="ga" value="9.80665" class="constant_field" size="9" /><br />
-                <label class="constant_label" for="bd">Burst Diameter (m)</label><br />
-                <input type="checkbox" id="bd_c" />
-                <input type="text" id="bd" class="constant_field" size="9" disabled="disabled" value="7.86"/><br />
-                <label class="constant_label" for="cd">Balloon Cd</label><br />
-                <input type="checkbox" id="cd_c" />
-                <input type="text" id="cd" class="constant_field" size="9" disabled="disabled" value="0.3"/><br />
+
+        <div id="calcbox" class="fourteen columns">
+            <div class="fourteen columns alpha">
+                <div class="five columns alpha grey float first">
+                    <div class="sign">↣</div>
+                    <h4>Payload Mass (g)</h4>
+                    <input type="text" id="mp" class="input_field numeric scrollable" value="1500" rel="5" tabindex="1"/>
+                    <h4>Balloon Mass (g)</h4>
+                    <select class="input_field" id="mb" tabindex="2">
+                        <option value="k200">Kaymont - 200</option>
+                        <option value="k300">Kaymont - 300</option>
+                        <option value="k350">Kaymont - 350</option>
+                        <option value="k450">Kaymont - 450</option>
+                        <option value="k500">Kaymont - 500</option>
+                        <option value="k600">Kaymont - 600</option>
+                        <option value="k700">Kaymont - 700</option>
+                        <option value="k800">Kaymont - 800</option>
+                        <option value="k1000" selected="selected">Kaymont - 1000</option>
+                        <option value="k1200">Kaymont - 1200</option>
+                        <option value="k1500">Kaymont - 1500</option>
+                        <option value="k2000">Kaymont - 2000</option>
+                        <option value="k3000">Kaymont - 3000</option>
+                        <option value="h200">Hwoyee - 200</option>
+                        <option value="h300">Hwoyee - 300</option>
+                        <option value="h350">Hwoyee - 350</option>
+                        <option value="h450">Hwoyee - 400</option>
+                        <option value="h500">Hwoyee - 500</option>
+                        <option value="h600">Hwoyee - 600</option>
+                        <option value="h700">Hwoyee - 750</option>
+                        <option value="h800">Hwoyee - 800</option>
+                        <option value="h800">Hwoyee - 950</option>
+                        <option value="h1000">Hwoyee - 1000</option>
+                        <option value="h1200">Hwoyee - 1200</option>
+                        <option value="h1500">Hwoyee - 1500</option>
+                        <option value="h1600">Hwoyee - 1600</option>
+                        <option value="h2000">Hwoyee - 2000</option>
+                        <option value="p1200">PAWAN - 1200</option>
+                    </select>
+                </div>
+                <div class="five columns alpha grey float second">
+                    <div class="sign">↴</div>
+                    <h4>Target Burst Altitude (m)</h4>
+                    <input type="text" id="tba" class="input_field numeric scrollable" rel="100" value="33000" tabindex="3"/>
+                    <h4>Target Ascent rate (m/s)</h4>
+                    <input type="text" id="tar" class="input_field numeric scrollable" rel="0.1" tabindex="4"/>
+                </div>
+                <div class="thirteen columns alpha grey third">
+                    <h4 id="result">Result</h4>
+                    <div class="three columns offset-by-one">
+                        <span class="output_label">Burst Altitude:</span>
+                        <span class="output_data" id="ba">33000 m</span>
+                        <span class="output_label">Ascent Rate:</span>
+                        <span class="output_data" id="ar">2.33 m/s</span>
+                    </div>
+                    <div class="three columns offset-by-one">
+                        <span class="output_label">Time to Burst:</span>
+                        <span class="output_data" id="ttb">238 min</span>
+                        <span class="output_label">Neck Lift:</span>
+                        <span class="output_data" id="nl">1733 g</span>
+                    </div>
+                    <div class="three columns offset-by-one">
+                        <span class="output_label">Volume:</span>
+                        <span class="output_data" id="lv_m3">2.66 m<sup>3</sup></span>
+                        <span class="output_label" id="lv_l">2660 L</span>
+                        <span class="output_data" id="lv_cf">93.9 ft<sup>3</sup></span>
+                    </div>
+                </div>
+                <div class="thirteen columns alpha grey fourth closed">
+                    <h4>Constants (Advanced)</h4>
+                    <div class="column">
+                        <label class="constant_label" for="gas">Gas</label><br />
+                        <select id="gas" class="constant_field">
+                            <option value="he">Helium</option>
+                            <option value="h">Hydrogen</option>
+                            <option value="ch4">Methane</option>
+                            <option value="custom">Custom</option>
+                        </select><br />
+                        <label class="constant_label" for="rho_g">Gas Density (kg/m<sup>3</sup>)</label><br />
+                        <input type="text" id="rho_g" value="0.1786" class="constant_field" size="9" disabled="disabled"/><br />
+                    </div>
+                    <div class="column">
+                        <label class="constant_label" for="rho_a">Air Density (kg/m<sup>3</sup>)</label><br />
+                        <input type="text" id="rho_a" value="1.2050" class="constant_field numeric" autocomplete="off" size="9"/><br />
+                        <label class="constant_label" for="adm">Air Density Model</label><br />
+                        <input type="text" id="adm" value="7238.3" class="constant_field numeric" autocomplete="off" size="9"/><br />
+                        <label class="constant_label" for="ga">Gravitational<br />Acceleration (m/s<sup>2</sup>)</label><br />
+                        <input type="text" id="ga" value="9.80665" class="constant_field numeric" autocomplete="off" size="9" /><br />
+                    </div>
+                    <div class="column omega">
+                        <input type="checkbox" class="float" id="bd_c" />
+                        <label class="constant_label" for="bd">Burst Diameter (m)</label><br />
+                        <input type="text" id="bd" class="constant_field numeric scrollable" rel="0.2" disabled="disabled" value="7.86" autocomplete="off" /><br />
+                        <input type="checkbox" class="float" id="cd_c" />
+                        <label class="constant_label" for="cd">Balloon Cd</label><br />
+                        <input type="text" id="cd" class="constant_field numeric scrollable" rel="0.05"  disabled="disabled" value="0.3" autocomplete="off" /><br />
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
+
     </body>
 </html>
