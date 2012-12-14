@@ -147,6 +147,7 @@ function find_bd(mb) {
     // https://sites.google.com/site/balloonnewswebstore/1200g-balloon-data
     bds["p1200"] = 8.0;
 
+    var bd;
     
     if($('#bd_c:checked').length) bd = get_value('bd');
     else bd = bds[$('#mb').val()];
@@ -188,6 +189,8 @@ function find_cd(mb) {
     cds["h2000"] = 0.25;
     // PAWAN data also guesswork
     cds["p1200"] = 0.25;
+
+    var cd;
 
     if($('#cd_c:checked').length) cd = get_value('cd');
     else cd = cds[$('#mb').val()];
