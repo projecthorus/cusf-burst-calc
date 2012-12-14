@@ -362,7 +362,7 @@ $(document).ready(function() {
     $('.fourth.closed').click(function() {
         var e = $(this).unbind('click');
         var time = 0;
-        e.find('.column:not(:visible)').each(function(i,k) {
+        e.find('.columns:not(:visible)').each(function(i,k) {
             $(k).delay(time).fadeIn();
             time += 250;
         });
@@ -394,7 +394,7 @@ $(document).ready(function() {
         if(isNaN(x)) return false;
         // different fields can use different step value
         // step value has to be defined on the element by 'rel' attribute
-        var step = parseFloat(elm.attr('rel'));
+        var step = parseFloat(elm.attr('data-step'));
         if(isNaN(step)) step = 5;
 
         x = x + (step * delta);
