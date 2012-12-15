@@ -147,6 +147,7 @@ function find_bd(mb) {
     // https://sites.google.com/site/balloonnewswebstore/1200g-balloon-data
     bds["p1200"] = 8.0;
 
+    var bd;
     
     if($('#bd_c:checked').length) bd = get_value('bd');
     else bd = bds[$('#mb').val()];
@@ -188,6 +189,8 @@ function find_cd(mb) {
     cds["h2000"] = 0.25;
     // PAWAN data also guesswork
     cds["p1200"] = 0.25;
+
+    var cd;
 
     if($('#cd_c:checked').length) cd = get_value('cd');
     else cd = cds[$('#mb').val()];
@@ -359,7 +362,7 @@ $(document).ready(function() {
     $('.fourth.closed').click(function() {
         var e = $(this).unbind('click');
         var time = 0;
-        e.find('.column:not(:visible)').each(function(i,k) {
+        e.find('.columns:not(:visible)').each(function(i,k) {
             $(k).delay(time).fadeIn();
             time += 250;
         });
@@ -391,7 +394,7 @@ $(document).ready(function() {
         if(isNaN(x)) return false;
         // different fields can use different step value
         // step value has to be defined on the element by 'rel' attribute
-        var step = parseFloat(elm.attr('rel'));
+        var step = parseFloat(elm.attr('data-step'));
         if(isNaN(step)) step = 5;
 
         x = x + (step * delta);
