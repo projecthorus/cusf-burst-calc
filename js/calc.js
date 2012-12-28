@@ -3,13 +3,17 @@ function get_value(id) {
 }
 
 function clear_errors() {
-    $("#result").removeClass('error').text('Result');
+    $("#result").removeClass('error').removeClass('warning').text('Result');
 }
 
-function set_error(id, error) {
-    $("#result").addClass('error').text(error);
+function set_error(id, text) {
+    $("#result").addClass('error').text(text);
 }
 
+function set_warning(id, text) {
+    text = "Result (" + text + ")";
+    $("#result").addClass('warning').text(text);
+}
 function sanity_check_inputs(mb, mp, mp_set, tar, tba, tar_set, tba_set) {
     if(tar_set && tba_set) {
         set_error('tar', "Specify either target burst altitude or target ascent rate!");
@@ -318,6 +322,10 @@ function calc_update() {
         return;
     }
 
+    if(bd >= 10 && ascent_rate < 4.8) {
+        set_warning('floater', "configuration suggests a possible floater");
+    }
+
     ascent_rate = ascent_rate.toFixed(2);
     burst_altitude = burst_altitude.toFixed();
     time_to_burst = time_to_burst.toFixed();
@@ -377,8 +385,8 @@ $(document).ready(function() {
     // validate input fields, numeric only
     $('input.numeric').keypress(function(event) {
         if(event.which == 0 // arrows and other essential keys
-           || event.which == 8 // backspace
            || event.which == 46 // '.'
+           || event.which < 32 // not printable chars + backspace, tab etc
            || (event.which >= 48 && event.which <= 57) // numbers 0-9
            ) return;
         event.preventDefault();
