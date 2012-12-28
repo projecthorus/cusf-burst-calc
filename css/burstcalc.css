@@ -90,4 +90,7 @@ input.scrollable:hover {
 #result.error{
     color: #FE727C;
 }
+#result.warning{
+    color: #2AB814;
+}
 
