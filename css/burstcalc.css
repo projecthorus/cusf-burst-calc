@@ -31,7 +31,6 @@ input.scrollable:hover {
     display: none !important;
 }
 #main {
-    width: 800px;
     margin-bottom: 40px;
 }
 #main .grey {
@@ -83,9 +82,15 @@ input.scrollable:hover {
     top: 40%;
     right: -60px;
 }
+#main .first .sign:after {
+    content: "↣";
+}
 #main .second .sign  {
     top: 50%;
     right: -80px;
+}
+#main .second .sign:after {
+    content: "↴";
 }
 #result.error{
     color: #FE727C;
@@ -94,3 +99,82 @@ input.scrollable:hover {
     color: #2AB814;
 }
 
+@media only screen and (max-width: 480px) {
+    #main {
+        width: 320px;
+        margin-bottom: 10px;
+    }
+    #main .sign {
+        display: none;
+    }
+    #main .first,
+    #main .second {
+        margin-top: 15px;
+    }
+    #main .second {
+        margin-left: 0px;
+    }
+    #main .first,
+    #main .second {
+        margin-top: 15px;
+    }
+    #main .second {
+        margin-left: 0px;
+    }
+    #calcbox {
+        padding-left: 15px;
+    }
+    #grey-section {
+        margin-bottom: 10px;
+    }
+    #aboutbox,
+    #helpbox {
+        padding: 0px 10px;
+    }
+}
+@media only screen and (min-width: 480px) and (max-width: 865px) {
+    #main {
+        width: 450px;
+        margin-bottom: 10px;
+    }
+    #main .first .sign {
+        right: 10px;
+    }
+    #main .first .sign:after {
+        content: "↴";
+    }
+    #main .second .sign {
+        right: 10px;
+        top: 40%;
+    }
+    #main .second .sign:after {
+        content: "↓";
+    }
+    #main .first,
+    #main .second {
+        margin-top: 15px;
+    }
+    #main .second {
+        margin-left: 0px;
+    }
+    #calcbox {
+        padding-left: 15px;
+    }
+    #main .first,
+    #main .second {
+        margin-top: 15px;
+    }
+    #main .second {
+        margin-left: 0px;
+    }
+    #calcbox {
+        padding-left: 15px;
+    }
+    #grey-section {
+        margin-bottom: 10px;
+    }
+    #aboutbox,
+    #helpbox {
+        padding: 0px 10px;
+    }
+}

@@ -343,6 +343,8 @@ function calc_update() {
     document.getElementById('lv_cf').innerHTML = launch_cf + " ft<sup>3</sup>";
 }
 
+var focusedElement = null;
+
 
 $(document).ready(function() {
     // init page title
@@ -406,6 +408,30 @@ $(document).ready(function() {
         if(isNaN(step)) step = 5;
 
         x = x + (step * delta);
+        if(x <= 0) return; // no numbers bellow zero
+
+        x = Math.round(x*100)/100; //round to two decimal places
+
+        elm.val(x);      
+        elm.change(); // calculate result
+   
+        return false;
+    })
+    .focus(function() { focusedElement = $(this); });
+
+
+    // adjust value on portable devices with a swipe
+    $(document).bind('rotate', function(a, event) {
+        if(!focusedElement) return;
+        var elm = focusedElement;
+        var x = parseFloat(elm.val());
+        if(isNaN(x)) return false;
+        // different fields can use different step value
+        // step value has to be defined on the element by 'rel' attribute
+        var step = parseFloat(elm.attr('data-step'));
+        if(isNaN(step)) step = 5;
+
+        x += step * event.direction.vector;
         if(x <= 0) return; // no numbers bellow zero
 
         x = Math.round(x*100)/100; //round to two decimal places

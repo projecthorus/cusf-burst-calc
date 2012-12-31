@@ -8,7 +8,7 @@
         <title>habitat burst calculator</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
         <link rel="stylesheet" href="t/css/base.css"/>
-        <link rel="stylesheet" href="t/css/skeleton.css"/>
+        <link rel="stylesheet" href="css/skeleton.css"/>
         <link rel="stylesheet" href="t/css/layout.css"/>
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -18,24 +18,23 @@
         <script type="text/javascript" src="js/jquery-1.8.3-min.js"></script>
         <script type="text/javascript" src="js/jquery-color.js"></script>
         <script type="text/javascript" src="js/jquery-mousewheel.js"></script>
+        <script type="text/javascript" src="js/jgestures.min.js"></script>
         <script type="text/javascript" src="js/calc.js"></script>
     </head>
     <body>
     <header>
         <div class="container">
-            <div class="sixteen columns">
-                <h1 class="no-margin">
-                    <a href="http://habhub.org/">
-                        <img src="t/images/habhub_logo.jpg" alt="habhub" title="habhub"/>
-                    </a>
-                </h1>
-                <span id="app_name"><b>burstcalc</b></span>
-            </div>
+            <h1 class="no-margin">
+                <a href="http://habhub.org/">
+                    <img src="t/images/habhub_logo.jpg" alt="habhub" title="habhub"/>
+                </a>
+            </h1>
+            <span id="app_name"><b>burstcalc</b></span>
         </div>
     </header>
     <div id="grey-section">
         <div class="container">
-            <div class="two-thirds column">
+            <div class="column">
                 <h3 class="remove-bottom" id="page_title">Loading...</h3>
                 <p class="remove-bottom" id="page_subtitle">If you can read this, the javascript isn't working :-(.</p>
             </div>
@@ -43,7 +42,7 @@
     </div>
 
 
-    <section id="main" class="container">
+    <section id="main" class="container alpha">
         <div id="helpbox" class="thirteen column" style="display: none">
             <h2>Help</h2>
             <p>
@@ -95,10 +94,10 @@
             </p>
         </div>
 
-        <div id="calcbox" class="fourteen columns">
-            <div class="fourteen columns alpha">
+        <div id="calcbox" class="fourteen columns alpha omega">
+            <div  class="fourteen columns alpha omega">
                 <div class="five columns alpha grey float first">
-                    <div class="sign">↣</div>
+                    <div class="sign"></div>
                     <h4>Payload Mass (g)</h4>
                     <input type="text" id="mp" class="input_field numeric scrollable" value="1500" data-step="5" tabindex="1"/>
                     <h4>Balloon Mass (g)</h4>
@@ -134,7 +133,7 @@
                     </select>
                 </div>
                 <div class="five columns alpha grey float second">
-                    <div class="sign">↴</div>
+                    <div class="sign"></div>
                     <h4>Target Burst Altitude (m)</h4>
                     <input type="text" id="tba" class="input_field numeric scrollable" data-step="100" value="33000" tabindex="3"/>
                     <h4>Target Ascent rate (m/s)</h4>
