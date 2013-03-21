@@ -348,7 +348,7 @@ var focusedElement = null;
 
 $(document).ready(function() {
     // init page title
-    $('#page_title').text("ballon burst calculator");
+    $('#page_title').text("balloon burst calculator");
     $('#page_subtitle').html("<a href='#'>About</a> | <a href='#'>Help</a>");
 
     // open about/help boxes
