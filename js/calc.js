@@ -132,6 +132,8 @@ function find_bd(mb) {
     bds["k1500"] = 9.44;
     bds["k2000"] = 10.54;
     bds["k3000"] = 13.00;
+    // 100g Hwoyee Data from http://www.hwoyee.com/images.aspx?fatherId=11010101&msId=1101010101&title=0
+    bds["h100"] = 2.00;
     // Hwoyee data from http://www.hwoyee.com/base.asp?ScClassid=521&id=521102
     bds["h200"] = 3.00;
     bds["h300"] = 3.80;
@@ -177,6 +179,7 @@ function find_cd(mb) {
     cds["k2000"] = 0.25;
     cds["k3000"] = 0.25;
     // Hwoyee data just guesswork
+    cds["h100"] = 0.25;
     cds["h200"] = 0.25;
     cds["h300"] = 0.25;
     cds["h350"] = 0.25;
