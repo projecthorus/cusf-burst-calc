@@ -170,8 +170,14 @@ function find_bd(mb) {
     bds["h1600"] = 10.50;
     bds["h2000"] = 11.00;
     // PAWAN data from
-    // https://sites.google.com/site/balloonnewswebstore/1200g-balloon-data
+    // http://randomaerospace.com/Random_Aerospace/Balloons.html
+    bds["p100"] = 1.6;
+    bds["p350"] = 4.0;
+    bds["p600"] = 5.8;
+    bds["p800"] = 6.6;
+    bds["p900"] = 7.0;
     bds["p1200"] = 8.0;
+    bds["p2000"] = 10.2;
 
     var bd;
     
@@ -215,7 +221,13 @@ function find_cd(mb) {
     cds["h1600"] = 0.25;
     cds["h2000"] = 0.25;
     // PAWAN data also guesswork
+    cds["p100"] = 0.25;
+    cds["p350"] = 0.25;
+    cds["p600"] = 0.3;
+    cds["p800"] = 0.3;
+    cds["p900"] = 0.3;
     cds["p1200"] = 0.25;
+    cds["p2000"] = 0.25;
 
     var cd;
 
