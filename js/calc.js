@@ -177,6 +177,7 @@ function find_bd(mb) {
     bds["p800"] = 6.6;
     bds["p900"] = 7.0;
     bds["p1200"] = 8.0;
+    bds["p1600"] = 9.5;
     bds["p2000"] = 10.2;
 
     var bd;
@@ -227,6 +228,7 @@ function find_cd(mb) {
     cds["p800"] = 0.3;
     cds["p900"] = 0.3;
     cds["p1200"] = 0.25;
+    cds["p1600"] = 0.25;
     cds["p2000"] = 0.25;
 
     var cd;
