@@ -169,7 +169,7 @@ function find_bd(mb) {
     bds["h1500"] = 9.50;
     bds["h1600"] = 10.50;
     bds["h2000"] = 11.00;
-    bds["h3000"] = 11.00;
+    bds["h3000"] = 12.50;
     // PAWAN data from
     // http://randomaerospace.com/Random_Aerospace/Balloons.html
     bds["p100"] = 1.6;
