@@ -186,7 +186,7 @@ function find_bd(mb) {
     bds["p2000"] = 10.2;
 
     var bd;
-    
+
     if($('#bd_c:checked').length) bd = get_value('bd');
     else bd = bds[$('#mb').val()];
 
@@ -277,7 +277,7 @@ function calc_update() {
 
     if(sanity_check_constants(rho_g, rho_a, adm, ga, bd, cd))
         return;
-    
+
     // Do some maths
     mb = parseFloat(mb.substr(1)) / 1000.0;
     mp = mp / 1000.0;
@@ -335,7 +335,7 @@ function calc_update() {
 
             alert("Three possible solutions found: "
                 + r1 + ", " + r2 + ", " + r3);
-            
+
             if(r1 > 0) {
                 launch_radius = r1;
             } else if(r2 > 0) {
@@ -402,7 +402,7 @@ $(document).ready(function() {
         });
         return false;
     });
-    
+
     // transition between about/help box to calc
     $('#aboutbox .close, #helpbox .close').click(function() {
         $('section>div:visible').fadeOut('fast', function() {
@@ -423,7 +423,7 @@ $(document).ready(function() {
 
         // swing scroll expanded constants into view
         $('html,body').animate({
-            scrollTop: e.offset().top 
+            scrollTop: e.offset().top
         }, {duraton: 1000, easing: 'swing'});
     });
 
@@ -435,7 +435,7 @@ $(document).ready(function() {
            || (event.which >= 48 && event.which <= 57) // numbers 0-9
            ) return;
         event.preventDefault();
-        
+
         $(this).stop(true,true).css({'background-color':'#FE727C'}).delay(50).animate({backgroundColor: 'white'}, 100);
     });
 
@@ -458,9 +458,9 @@ $(document).ready(function() {
 
         x = Math.round(x*100)/100; //round to two decimal places
 
-        elm.val(x);      
+        elm.val(x);
         elm.change(); // calculate result
-   
+
         return false;
     })
     .focus(function() { focusedElement = $(this); });
@@ -486,9 +486,9 @@ $(document).ready(function() {
 
         x = Math.round(x*100)/100; //round to two decimal places
 
-        elm.val(x);      
+        elm.val(x);
         elm.change(); // calculate result
-   
+
         return false;
     });
 
