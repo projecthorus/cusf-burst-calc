@@ -79,27 +79,31 @@ function sanity_check_inputs(mb, mp, mp_set, tar, tba, tar_set, tba_set) {
 
 function sanity_check_constants(rho_g, rho_a, adm, ga, bd, cd) {
     if(!rho_a || rho_a < 0) {
-        show_error('rho_a');
+        set_error('rho_a',"You need to specify a valid air density. (0<Ad)");
         return 1;
     }
-    if(!rho_g || rho_g < 0 || rho_g > rho_a) {
-        show_error('rho_g');
+    if(!rho_g || rho_g < 0) {
+        set_error('rho_g',"You need to specify a valid gas density. (0<Gd)");
+        return 1;
+    }
+    if(rho_g > rho_a) {
+        set_error('rho_g',"Air density is less the gas density.");
         return 1;
     }
     if(!adm || adm < 0) {
-        show_error('adm');
+        set_error('adm',"You need to specify a valid air density model. (0<Adm)");
         return 1;
     }
-    if(!ga || ga < 0) {
-        show_error('ga');
+    if(!ga || ga <= 0) {
+        set_error('ga',"You need to specify a valid gravitational acceleration. (0<Ga)");
         return 1;
     }
     if(!cd || cd < 0 || cd > 1) {
-        show_error('cd');
+        set_error('cd',"You need to specify a valid drag coefficient. (0≤Cd≤1)");
         return 1;
     }
-    if(!bd || bd < 0) {
-        show_error('bd');
+    if(!bd || bd <= 0) {
+        set_error('bd',"You need to specify a valid burst diameter. (0<Bd)");
         return 1;
     }
 
@@ -444,10 +448,13 @@ $(document).ready(function() {
         // different fields can use different step value
         // step value has to be defined on the element by 'rel' attribute
         var step = parseFloat(elm.attr('data-step'));
+        // maximum value for the field
+        var max = parseFloat(elm.attr('data-max'));
         if(isNaN(step)) step = 5;
 
         x = x + (step * delta);
         if(x <= 0) return; // no numbers bellow zero
+        if(!isNaN(max) && x > max) return;
 
         x = Math.round(x*100)/100; //round to two decimal places
 
@@ -468,10 +475,14 @@ $(document).ready(function() {
         // different fields can use different step value
         // step value has to be defined on the element by 'rel' attribute
         var step = parseFloat(elm.attr('data-step'));
+        // maximum value for the field
+        var max = parseFloat(elm.attr('data-max'));
+
         if(isNaN(step)) step = 5;
 
         x += step * event.direction.vector;
         if(x <= 0) return; // no numbers bellow zero
+        if(!isNaN(max) && x > max) return;
 
         x = Math.round(x*100)/100; //round to two decimal places
 
@@ -491,7 +502,7 @@ $(document).ready(function() {
     });
 
     // calculate result on change
-    var ids = ['mb', 'mp', 'tar', 'tba', 'gas', 'rho_g', 'rho_a', 'adm', 'bd', 'cd', 'bd_c', 'cd_c'];
+    var ids = ['mb', 'mp', 'tar', 'tba', 'gas', 'rho_g', 'rho_a', 'adm', 'bd', 'cd', 'bd_c', 'cd_c', 'ga'];
 
     $('#' + ids.join(", #")).bind('keyup change',function() {
         calc_update();

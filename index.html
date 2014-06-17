@@ -197,7 +197,7 @@
                     <h4>Constants (Advanced)</h4>
                     <div class="columns four" style="display: none">
                         <label class="constant_label" for="gas">Gas</label><br />
-                        <select id="gas" class="constant_field">
+                        <select id="gas" class="constant_field" autocomplete="off">
                             <option value="he">Helium</option>
                             <option value="h">Hydrogen</option>
                             <option value="ch4">Methane</option>
@@ -215,12 +215,12 @@
                         <input type="text" id="ga" value="9.80665" class="constant_field numeric" autocomplete="off" size="9" /><br />
                     </div>
                     <div class="columns four omega" style="display: none">
-                        <input type="checkbox" class="float" id="bd_c" />
+                        <input type="checkbox" class="float" id="bd_c" autocomplete="off" />
                         <label class="constant_label" for="bd">Burst Diameter (m)</label><br />
                         <input type="text" id="bd" class="constant_field numeric scrollable" data-step="0.2" disabled="disabled" value="7.86" autocomplete="off" /><br />
-                        <input type="checkbox" class="float" id="cd_c" />
+                        <input type="checkbox" class="float" id="cd_c" autocomplete="off" />
                         <label class="constant_label" for="cd">Balloon Cd</label><br />
-                        <input type="text" id="cd" class="constant_field numeric scrollable" data-step="0.05"  disabled="disabled" value="0.3" autocomplete="off" /><br />
+                        <input type="text" id="cd" class="constant_field numeric scrollable" data-step="0.05" data-max="1" disabled="disabled" value="0.3" autocomplete="off" /><br />
                     </div>
                 </div>
             </div>
