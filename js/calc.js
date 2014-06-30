@@ -65,11 +65,11 @@ function sanity_check_inputs(mb, mp, mp_set, tar, tba, tar_set, tba_set) {
     if(!mp_set) {
         set_error('mp', "You have to enter a payload mass!");
         return 1;
-    } else if(mp < 20) {
-        set_error('mp', "Mass is too small! (less than 20g)");
+    } else if(mp < 10) {
+        set_error('mp', "Mass is too small! (less than 10g)");
         return 1;
-    } else if(mp > 5000) {
-        set_error('mp', "Mass is too large! (over 5kg)");
+    } else if(mp > 20000) {
+        set_error('mp', "Mass is too large! (over 20kg)");
         return 1;
     }
 
