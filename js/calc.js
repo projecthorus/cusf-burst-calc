@@ -301,10 +301,8 @@ function calc_update() {
         var d = - (mp + mb) * ga;
 
         var f = (((3*c)/a) - (Math.pow(b, 2) / Math.pow(a,2)) / 3.0);
-        var g = (
-            ((2*Math.pow(b,3))/Math.pow(a,3)) -
-            ((9*b*c)/(Math.pow(a,2))) + ((27*d)/a) / 27.0
-        );
+        var g = (((2*Math.pow(b,3))/Math.pow(a,3)) -
+                 ((9*b*c)/(Math.pow(a,2))) + ((27*d)/a)) / 27.0;
         var h = (Math.pow(g,2) / 4.0) + (Math.pow(f,3) / 27.0);
 
         if(h <= 0)
