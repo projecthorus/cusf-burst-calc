@@ -307,45 +307,14 @@ function calc_update() {
         );
         var h = (Math.pow(g,2) / 4.0) + (Math.pow(f,3) / 27.0);
 
-        if(h>0) {
-            // One real root. This is what should happen.
-            var R = (-0.5 * g) + Math.sqrt(h);
-            var S = Math.pow(R, 1.0/3.0);
-            var T = (-0.5 * g) - Math.sqrt(h);
-            var U = Math.pow(T, 1.0/3.0);
-            launch_radius = (S+U) - (b/(3*a));
-        } else if(f==0 && g==0 && h==0) {
-            // Three real and equal roots
-            // Will this ever even happen?
-            launch_radius = -1 * Math.pow(d/a, 1.0/3.0);
-        } else if(h <= 0) {
-            // Three real and different roots
-            // What the hell do we do?!
-            // It needs trig! fffff
-            var i = Math.sqrt((Math.pow(g,2)/4.0) - h);
-            var j = Math.pow(i, 1.0/3.0);
-            var k = Math.acos(-g / (2*i));
-            var L = -1 * j;
-            var M = Math.cos(K/3.0);
-            var N = Math.sqrt(3) * Math.sin(K/3.0);
-            var P = (b/(3*a)) * -1;
-            var r1 = 2*j*Math.cos(k/3.0) - (b/(3*a));
-            var r2 = L * (M + N) + P;
-            var r3 = L * (M - N) + P;
+        if(h <= 0)
+            throw "expect exactly one real root";
 
-            alert("Three possible solutions found: "
-                + r1 + ", " + r2 + ", " + r3);
-
-            if(r1 > 0) {
-                launch_radius = r1;
-            } else if(r2 > 0) {
-                launch_radius = r2;
-            } else if(r3 > 0) {
-                launch_radius = r3;
-            }
-        } else {
-            // No real roots
-        }
+        var R = (-0.5 * g) + Math.sqrt(h);
+        var S = Math.pow(R, 1.0/3.0);
+        var T = (-0.5 * g) - Math.sqrt(h);
+        var U = Math.pow(T, 1.0/3.0);
+        launch_radius = (S+U) - (b/(3*a));
     }
 
     var launch_area = Math.PI * Math.pow(launch_radius, 2);
