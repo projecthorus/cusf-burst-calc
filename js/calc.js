@@ -130,6 +130,11 @@ function find_rho_g() {
             document.getElementById('rho_g').value = rho_g;
             document.getElementById('rho_g').disabled = "disabled";
             break;
+        case 'boc':
+            rho_g = 0.21076;
+            document.getElementById('rho_g').value = rho_g;
+            document.getElementById('rho_g').disabled = "disabled";
+            break;
         default:
             document.getElementById('rho_g').disabled = "";
             rho_g = get_value('rho_g');
@@ -187,8 +192,13 @@ function find_bd(mb) {
 
     var bd;
 
-    if($('#bd_c:checked').length) bd = get_value('bd');
-    else bd = bds[$('#mb').val()];
+    if($('#bd_c:checked').length){
+        bd = get_value('bd');
+    } else {
+        bd = bds[$('#mb').val()];
+        // Write data back into bd field.
+        $('#bd').val(bd.toFixed(2));
+    }
 
     return bd;
 }
@@ -239,8 +249,13 @@ function find_cd(mb) {
 
     var cd;
 
-    if($('#cd_c:checked').length) cd = get_value('cd');
-    else cd = cds[$('#mb').val()];
+    if($('#cd_c:checked').length){ 
+        cd = get_value('cd');
+    } else {
+        cd = cds[$('#mb').val()];
+        // Write data back into cd field.
+        $('#cd').val(cd.toFixed(2));
+    }
     return cd;
 }
 
