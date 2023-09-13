@@ -148,19 +148,25 @@ function find_bd(mb) {
     var bds = new Array();
 
     // From Kaymont Totex Sounding Balloon Data
+    bds["k50"] = 0.88;
+    bds["k100"] = 1.96;
+    bds["k150"] = 2.52;
     bds["k200"] = 3.00;
     bds["k300"] = 3.78;
     bds["k350"] = 4.12;
-    bds["k450"] = 4.72;
-    bds["k500"] = 4.99;
+   //bds["k450"] = 4.72; // Discontinued?
+   //bds["k500"] = 4.99; // Discontinued?
     bds["k600"] = 6.02;
-    bds["k700"] = 6.53;
+    //bds["k700"] = 6.53; // Discontinued?
     bds["k800"] = 7.00;
     bds["k1000"] = 7.86;
     bds["k1200"] = 8.63;
     bds["k1500"] = 9.44;
+    bds["k1600"] = 9.71;
+    bds["k1800"] = 9.98;
     bds["k2000"] = 10.54;
     bds["k3000"] = 13.00;
+    bds["k4000"] = 15.06;
     // 100g Hwoyee Data from http://www.hwoyee.com/images.aspx?fatherId=11010101&msId=1101010101&title=0
     bds["h100"] = 2.00;
     // Hwoyee data from http://www.hwoyee.com/base.asp?ScClassid=521&id=521102
@@ -207,6 +213,9 @@ function find_cd(mb) {
     var cds = new Array();
 
     // From Kaymont Totex Sounding Balloon Data
+    cds["k50"] = 0.25;
+    cds["k100"] = 0.25;
+    cds["k150"] = 0.25;
     cds["k200"] = 0.25;
     cds["k300"] = 0.25;
     cds["k350"] = 0.25;
@@ -218,8 +227,11 @@ function find_cd(mb) {
     cds["k1000"] = 0.30;
     cds["k1200"] = 0.25;
     cds["k1500"] = 0.25;
+    cds["k1600"] = 0.25;
+    cds["k1800"] = 0.25;
     cds["k2000"] = 0.25;
     cds["k3000"] = 0.25;
+    cds["k4000"] = 0.25;
     // Hwoyee data just guesswork
     cds["h100"] = 0.25;
     cds["h200"] = 0.25;
