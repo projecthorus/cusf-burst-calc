@@ -77,7 +77,7 @@ function sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, target_burst_al
 
 }
 
-function sanity_check_constants(rho_g, rho_a, adm, ga, bd, cd) {
+function sanity_check_constants(rho_g, rho_a, adm, ga, burst_diameter, cd) {
     if(!rho_a || rho_a < 0) {
         set_error('rho_a',"You need to specify a valid air density. (0<Ad)");
         return 1;
@@ -102,8 +102,8 @@ function sanity_check_constants(rho_g, rho_a, adm, ga, bd, cd) {
         set_error('cd',"You need to specify a valid drag coefficient. (0≤Cd≤1)");
         return 1;
     }
-    if(!bd || bd <= 0) {
-        set_error('bd',"You need to specify a valid burst diameter. (0<Bd)");
+    if(!burst_diameter || burst_diameter <= 0) {
+        set_error('burst_diameter',"You need to specify a valid burst diameter. (0<Bd)");
         return 1;
     }
 
@@ -144,68 +144,68 @@ function find_rho_g() {
     return rho_g;
 }
 
-function find_bd(mb) {
-    var bds = new Array();
+function find_burst_diameter(mb) {
+    var burst_diameters = new Array();
 
     // From Kaymont Totex Sounding Balloon Data
-    bds["k50"] = 0.88;
-    bds["k100"] = 1.96;
-    bds["k150"] = 2.52;
-    bds["k200"] = 3.00;
-    bds["k300"] = 3.78;
-    bds["k350"] = 4.12;
-   //bds["k450"] = 4.72; // Discontinued?
-   //bds["k500"] = 4.99; // Discontinued?
-    bds["k600"] = 6.02;
-    //bds["k700"] = 6.53; // Discontinued?
-    bds["k800"] = 7.00;
-    bds["k1000"] = 7.86;
-    bds["k1200"] = 8.63;
-    bds["k1500"] = 9.44;
-    bds["k1600"] = 9.71;
-    bds["k1800"] = 9.98;
-    bds["k2000"] = 10.54;
-    bds["k3000"] = 13.00;
-    bds["k4000"] = 15.06;
+    burst_diameters["k50"] = 0.88;
+    burst_diameters["k100"] = 1.96;
+    burst_diameters["k150"] = 2.52;
+    burst_diameters["k200"] = 3.00;
+    burst_diameters["k300"] = 3.78;
+    burst_diameters["k350"] = 4.12;
+    //burst_diameters["k450"] = 4.72; // Discontinued?
+    //burst_diameters["k500"] = 4.99; // Discontinued?
+    burst_diameters["k600"] = 6.02;
+    //burst_diameters["k700"] = 6.53; // Discontinued?
+    burst_diameters["k800"] = 7.00;
+    burst_diameters["k1000"] = 7.86;
+    burst_diameters["k1200"] = 8.63;
+    burst_diameters["k1500"] = 9.44;
+    burst_diameters["k1600"] = 9.71;
+    burst_diameters["k1800"] = 9.98;
+    burst_diameters["k2000"] = 10.54;
+    burst_diameters["k3000"] = 13.00;
+    burst_diameters["k4000"] = 15.06;
     // 100g Hwoyee Data from http://www.hwoyee.com/images.aspx?fatherId=11010101&msId=1101010101&title=0
-    bds["h100"] = 2.00;
+    burst_diameters["h100"] = 2.00;
     // Hwoyee data from http://www.hwoyee.com/base.asp?ScClassid=521&id=521102
     // Updated 2024-11 from https://www.hwoyee.com/weather-balloon-meteorological-balloon-for-weather-sounding-wind-or-cloud-detection-near-space-researchesgiant-round-balloons-huge-balloons-product/
-    bds["h200"] = 2.97;
-    bds["h300"] = 4.30;
-    bds["h350"] = 4.80;
-    bds["h500"] = 5.80;
-    bds["h600"] = 6.50;
-    bds["h750"] = 6.90;
-    bds["h800"] = 7.00;
-    bds["h1000"] = 8.00;
-    bds["h1200"] = 9.10;
-    bds["h1600"] = 10.00;
+    burst_diameters["h200"] = 2.97;
+    burst_diameters["h300"] = 4.30;
+    burst_diameters["h350"] = 4.80;
+    burst_diameters["h500"] = 5.80;
+    burst_diameters["h600"] = 6.50;
+    burst_diameters["h750"] = 6.90;
+    burst_diameters["h800"] = 7.00;
+    burst_diameters["h1000"] = 8.00;
+    burst_diameters["h1200"] = 9.10;
+    burst_diameters["h1600"] = 10.00;
     // These two are fudged a little
-    bds["h2000"] = 11.00;
-    bds["h3000"] = 12.00;
+    burst_diameters["h2000"] = 11.00;
+    burst_diameters["h3000"] = 12.00;
     // PAWAN data from
     // http://randomaerospace.com/Random_Aerospace/Balloons.html
-    bds["p100"] = 1.6;
-    bds["p350"] = 4.0;
-    bds["p600"] = 5.8;
-    bds["p800"] = 6.6;
-    bds["p900"] = 7.0;
-    bds["p1200"] = 8.0;
-    bds["p1600"] = 9.5;
-    bds["p2000"] = 10.2;
+    burst_diameters["p100"] = 1.6;
+    burst_diameters["p350"] = 4.0;
+    burst_diameters["p600"] = 5.8;
+    burst_diameters["p800"] = 6.6;
+    burst_diameters["p900"] = 7.0;
+    burst_diameters["p1200"] = 8.0;
+    burst_diameters["p1600"] = 9.5;
+    burst_diameters["p2000"] = 10.2;
 
-    var bd;
+    var burst_diameter;
 
-    if($('#bd_c:checked').length){
-        bd = get_value('bd');
+    if($('#burst_diameter_c:checked').length){
+        burst_diameter = get_value('burst_diameter');
     } else {
-        bd = bds[$('#mb').val()];
-        // Write data back into bd field.
-        $('#bd').val(bd.toFixed(2));
+        burst_diameter = burst_diameters[$('#mb').val()];
+        // Write data back into burst_diameter field.
+        $('#burst_diameter').val(burst_diameter.toFixed(2));
     }
 
-    return bd;
+    return burst_diameter;
 }
 
 function find_cd(mb) {
@@ -298,10 +298,10 @@ function calc_update() {
     var rho_a = get_value('rho_a');
     var adm = get_value('adm');
     var ga = get_value('ga');
-    var bd = find_bd(mb);
+    var burst_diameter = find_burst_diameter(mb);
     var cd = find_cd(mb);
 
-    if(sanity_check_constants(rho_g, rho_a, adm, ga, bd, cd))
+    if(sanity_check_constants(rho_g, rho_a, adm, ga, burst_diameter, cd))
         return;
 
     // Do some maths
@@ -315,7 +315,7 @@ function calc_update() {
     var launch_radius = 0;
     var launch_volume = 0;
 
-    var burst_volume = (4.0/3.0) * Math.PI * Math.pow(bd / 2.0, 3);
+    var burst_volume = (4.0/3.0) * Math.PI * Math.pow(burst_diameter / 2.0, 3);
 
     if(target_burst_altitude_set) {
         launch_volume = burst_volume * Math.exp((-target_burst_altitude) / adm);
@@ -358,7 +358,7 @@ function calc_update() {
         return;
     }
 
-    if(bd >= 10 && ascent_rate < 4.8) {
+    if(burst_diameter >= 10 && ascent_rate < 4.8) {
         set_warning('floater', "configuration suggests a possible floater");
     }
 
@@ -486,16 +486,16 @@ $(document).ready(function() {
     });
 
     // enable disabled constants
-    $('#bd_c, #cd_c').click(function() {
-        if($('#bd_c:checked').length) $('#bd').removeAttr('disabled');
-        else $('#bd').attr('disabled', 'disabled');
+    $('#burst_diameter_c, #cd_c').click(function() {
+        if($('#burst_diameter_c:checked').length) $('#burst_diameter').removeAttr('disabled');
+        else $('#burst_diameter').attr('disabled', 'disabled');
 
         if($('#cd_c:checked').length) $('#cd').removeAttr('disabled');
         else $('#cd').attr('disabled', 'disabled');
     });
 
     // calculate result on change
-    var ids = ['mb', 'mp', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_g', 'rho_a', 'adm', 'bd', 'cd', 'bd_c', 'cd_c', 'ga'];
+    var ids = ['mb', 'mp', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_g', 'rho_a', 'adm', 'burst_diameter', 'cd', 'burst_diameter_c', 'cd_c', 'ga'];
 
     $('#' + ids.join(", #")).bind('keyup change',function() {
         calc_update();
