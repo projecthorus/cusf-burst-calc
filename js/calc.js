@@ -34,14 +34,14 @@ function set_warning(id, text) {
     text = "Result (" + text + ")";
     $("#result").addClass('warning').text(text);
 }
-function sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, tba, target_ascent_rate_set, tba_set) {
-    if(target_ascent_rate_set && tba_set) {
+function sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, target_burst_altitude, target_ascent_rate_set, target_burst_altitude_set) {
+    if(target_ascent_rate_set && target_burst_altitude_set) {
         set_error('target_ascent_rate', "Specify either target burst altitude or target ascent rate!");
-        set_error('tba', "Specify either target burst altitude or target ascent rate!");
+        set_error('target_burst_altitude', "Specify either target burst altitude or target ascent rate!");
         return 1;
-    } else if(!target_ascent_rate_set && !tba_set) {
+    } else if(!target_ascent_rate_set && !target_burst_altitude_set) {
         set_error('target_ascent_rate', "Must specify at least one target!");
-        set_error('tba', "Must specify at least one target!");
+        set_error('target_burst_altitude', "Must specify at least one target!");
         return 1;
     }
 
@@ -53,11 +53,11 @@ function sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, tba, target_asc
         return 1;
     }
 
-    if(tba_set && tba < 10000) {
-        set_error('tba', "Target burst altitude is too low! (less than 10km)");
+    if(target_burst_altitude_set && target_burst_altitude < 10000) {
+        set_error('target_burst_altitude', "Target burst altitude is too low! (less than 10km)");
         return 1;
-    } else if(tba_set && tba > 40000) {
-        set_error('tba',
+    } else if(target_burst_altitude_set && target_burst_altitude > 40000) {
+        set_error('target_burst_altitude',
             "Target burst altitude is too high! (greater than 40km)");
         return 1;
     }
@@ -278,19 +278,19 @@ function calc_update() {
     var mb = document.getElementById('mb').value;
     var mp = get_value('mp');
     var target_ascent_rate = get_value('target_ascent_rate');
-    var tba = get_value('tba');
+    var target_burst_altitude = get_value('target_burst_altitude');
     var mp_set = 0;
     var target_ascent_rate_set = 0;
-    var tba_set = 0;
+    var target_burst_altitude_set = 0;
 
     if(document.getElementById('mp').value)
         mp_set = 1;
     if(document.getElementById('target_ascent_rate').value)
         target_ascent_rate_set = 1;
-    if(document.getElementById('tba').value)
-        tba_set = 1;
+    if(document.getElementById('target_burst_altitude').value)
+        target_burst_altitude_set = 1;
 
-    if(sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, tba, target_ascent_rate_set, tba_set))
+    if(sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, target_burst_altitude, target_ascent_rate_set, target_burst_altitude_set))
         return;
 
     // Get constants and check them
@@ -317,8 +317,8 @@ function calc_update() {
 
     var burst_volume = (4.0/3.0) * Math.PI * Math.pow(bd / 2.0, 3);
 
-    if(tba_set) {
-        launch_volume = burst_volume * Math.exp((-tba) / adm);
+    if(target_burst_altitude_set) {
+        launch_volume = burst_volume * Math.exp((-target_burst_altitude) / adm);
         launch_radius = Math.pow((3*launch_volume)/(4*Math.PI), (1/3));
     } else if(target_ascent_rate_set) {
         var a = ga * (rho_a - rho_g) * (4.0 / 3.0) * Math.PI;
@@ -354,7 +354,7 @@ function calc_update() {
     time_to_burst = (burst_altitude / ascent_rate) / 60.0;
 
     if(isNaN(ascent_rate)) {
-        set_error('tba', "Altitude unreachable for this configuration.");
+        set_error('target_burst_altitude', "Altitude unreachable for this configuration.");
         return;
     }
 
@@ -495,7 +495,7 @@ $(document).ready(function() {
     });
 
     // calculate result on change
-    var ids = ['mb', 'mp', 'target_ascent_rate', 'tba', 'gas', 'rho_g', 'rho_a', 'adm', 'bd', 'cd', 'bd_c', 'cd_c', 'ga'];
+    var ids = ['mb', 'mp', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_g', 'rho_a', 'adm', 'bd', 'cd', 'bd_c', 'cd_c', 'ga'];
 
     $('#' + ids.join(", #")).bind('keyup change',function() {
         calc_update();
