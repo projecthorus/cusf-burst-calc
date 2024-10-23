@@ -316,6 +316,7 @@ function calc_update() {
     var launch_radius = 0;
     var launch_volume = 0;
 
+    // volume of sphere is 4/3 * pi * r^3
     var burst_volume = (4.0/3.0) * Math.PI * Math.pow(burst_diameter / 2.0, 3);
 
     if(target_burst_altitude_set) {
@@ -372,7 +373,7 @@ function calc_update() {
     launch_volume = launch_volume.toFixed(2);
 
     document.getElementById('ar').innerHTML = ascent_rate + " m/s";
-    document.getElementById('ba').innerHTML = burst_altitude + " m";
+    document.getElementById('burst_altitude').innerHTML = burst_altitude + " m";
     document.getElementById('ttb').innerHTML = time_to_burst + " min";
     document.getElementById('nl').innerHTML = neck_lift + " g";
     document.getElementById('lv_m3').innerHTML = launch_volume + " m<sup>3</sup>";
