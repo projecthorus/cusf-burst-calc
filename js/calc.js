@@ -376,9 +376,9 @@ function calc_update() {
     document.getElementById('burst_altitude').innerHTML = burst_altitude + " m";
     document.getElementById('time_to_burst').innerHTML = time_to_burst_minutes + " min";
     document.getElementById('neck_lift').innerHTML = neck_lift_g + " g";
-    document.getElementById('lv_m3').innerHTML = launch_volume + " m<sup>3</sup>";
-    document.getElementById('lv_l').innerHTML = launch_litres + " L";
-    document.getElementById('lv_cf').innerHTML = launch_cf + " ft<sup>3</sup>";
+    document.getElementById('launch_volume_m3').innerHTML = launch_volume + " m<sup>3</sup>";
+    document.getElementById('launch_volume_l').innerHTML = launch_litres + " L";
+    document.getElementById('launch_volume_cf').innerHTML = launch_cf + " ft<sup>3</sup>";
 }
 
 var focusedElement = null;
