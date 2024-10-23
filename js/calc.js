@@ -77,16 +77,16 @@ function sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, target_burst_al
 
 }
 
-function sanity_check_constants(rho_g, rho_a, adm, ga, burst_diameter, cd) {
-    if(!rho_a || rho_a < 0) {
-        set_error('rho_a',"You need to specify a valid air density. (0<Ad)");
+function sanity_check_constants(rho_g, rho_air, adm, ga, burst_diameter, cd) {
+    if(!rho_air || rho_air < 0) {
+        set_error('rho_air',"You need to specify a valid air density. (0<Ad)");
         return 1;
     }
     if(!rho_g || rho_g < 0) {
         set_error('rho_g',"You need to specify a valid gas density. (0<Gd)");
         return 1;
     }
-    if(rho_g > rho_a) {
+    if(rho_g > rho_air) {
         set_error('rho_g',"Air density is less the gas density.");
         return 1;
     }
@@ -295,13 +295,13 @@ function calc_update() {
 
     // Get constants and check them
     var rho_g = find_rho_g();
-    var rho_a = get_value('rho_a');
+    var rho_air = get_value('rho_air');
     var adm = get_value('adm');
     var ga = get_value('ga');
     var burst_diameter = find_burst_diameter(mb);
     var cd = find_cd(mb);
 
-    if(sanity_check_constants(rho_g, rho_a, adm, ga, burst_diameter, cd))
+    if(sanity_check_constants(rho_g, rho_air, adm, ga, burst_diameter, cd))
         return;
 
     // Do some maths
@@ -321,8 +321,8 @@ function calc_update() {
         launch_volume = burst_volume * Math.exp((-target_burst_altitude) / adm);
         launch_radius = Math.pow((3*launch_volume)/(4*Math.PI), (1/3));
     } else if(target_ascent_rate_set) {
-        var a = ga * (rho_a - rho_g) * (4.0 / 3.0) * Math.PI;
-        var b = -0.5 * Math.pow(target_ascent_rate, 2) * cd * rho_a * Math.PI;
+        var a = ga * (rho_air - rho_g) * (4.0 / 3.0) * Math.PI;
+        var b = -0.5 * Math.pow(target_ascent_rate, 2) * cd * rho_air * Math.PI;
         var c = 0;
         var d = - (mp + mb) * ga;
 
@@ -343,12 +343,12 @@ function calc_update() {
 
     var launch_area = Math.PI * Math.pow(launch_radius, 2);
     var launch_volume = (4.0/3.0) * Math.PI * Math.pow(launch_radius, 3);
-    var density_difference = rho_a - rho_g;
+    var density_difference = rho_air - rho_g;
     var gross_lift = launch_volume * density_difference;
     neck_lift = (gross_lift - mb) * 1000;
     var total_mass = mp + mb;
     var free_lift = (gross_lift - total_mass) * ga;
-    ascent_rate = Math.sqrt(free_lift / (0.5 * cd * launch_area * rho_a));
+    ascent_rate = Math.sqrt(free_lift / (0.5 * cd * launch_area * rho_air));
     var volume_ratio = launch_volume / burst_volume;
     burst_altitude = -(adm) * Math.log(volume_ratio);
     time_to_burst = (burst_altitude / ascent_rate) / 60.0;
@@ -495,7 +495,7 @@ $(document).ready(function() {
     });
 
     // calculate result on change
-    var ids = ['mb', 'mp', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_g', 'rho_a', 'adm', 'burst_diameter', 'cd', 'burst_diameter_c', 'cd_c', 'ga'];
+    var ids = ['mb', 'mp', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_g', 'rho_air', 'adm', 'burst_diameter', 'cd', 'burst_diameter_c', 'cd_c', 'ga'];
 
     $('#' + ids.join(", #")).bind('keyup change',function() {
         calc_update();
