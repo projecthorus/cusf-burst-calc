@@ -77,7 +77,7 @@ function sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, target_burst_al
 
 }
 
-function sanity_check_constants(rho_gas, rho_air, adm, gravity_accel, burst_diameter, cd) {
+function sanity_check_constants(rho_gas, rho_air, adm, gravity_accel, burst_diameter, drag_coeff) {
     if(!rho_air || rho_air < 0) {
         set_error('rho_air',"You need to specify a valid air density. (0<Ad)");
         return 1;
@@ -98,8 +98,8 @@ function sanity_check_constants(rho_gas, rho_air, adm, gravity_accel, burst_diam
         set_error('gravity_accel',"You need to specify a valid gravitational acceleration. (0<Ga)");
         return 1;
     }
-    if(!cd || cd < 0 || cd > 1) {
-        set_error('cd',"You need to specify a valid drag coefficient. (0≤Cd≤1)");
+    if(!drag_coeff || drag_coeff < 0 || drag_coeff > 1) {
+        set_error('drag_coeff',"You need to specify a valid drag coefficient. (0≤Cd≤1)");
         return 1;
     }
     if(!burst_diameter || burst_diameter <= 0) {
@@ -208,66 +208,66 @@ function find_burst_diameter(mb) {
     return burst_diameter;
 }
 
-function find_cd(mb) {
-    var cds = new Array();
+function find_drag_coeff(mb) {
+    var drag_coeffs = new Array();
 
     // From Kaymont Totex Sounding Balloon Data
-    cds["k50"] = 0.25;
-    cds["k100"] = 0.25;
-    cds["k150"] = 0.25;
-    cds["k200"] = 0.25;
-    cds["k300"] = 0.25;
-    cds["k350"] = 0.25;
-    cds["k450"] = 0.25;
-    cds["k500"] = 0.25;
-    cds["k600"] = 0.30;
-    cds["k700"] = 0.30;
-    cds["k800"] = 0.30;
-    cds["k1000"] = 0.30;
-    cds["k1200"] = 0.25;
-    cds["k1500"] = 0.25;
-    cds["k1600"] = 0.25;
-    cds["k1800"] = 0.25;
-    cds["k2000"] = 0.25;
-    cds["k3000"] = 0.25;
-    cds["k4000"] = 0.25;
+    drag_coeffs["k50"] = 0.25;
+    drag_coeffs["k100"] = 0.25;
+    drag_coeffs["k150"] = 0.25;
+    drag_coeffs["k200"] = 0.25;
+    drag_coeffs["k300"] = 0.25;
+    drag_coeffs["k350"] = 0.25;
+    drag_coeffs["k450"] = 0.25;
+    drag_coeffs["k500"] = 0.25;
+    drag_coeffs["k600"] = 0.30;
+    drag_coeffs["k700"] = 0.30;
+    drag_coeffs["k800"] = 0.30;
+    drag_coeffs["k1000"] = 0.30;
+    drag_coeffs["k1200"] = 0.25;
+    drag_coeffs["k1500"] = 0.25;
+    drag_coeffs["k1600"] = 0.25;
+    drag_coeffs["k1800"] = 0.25;
+    drag_coeffs["k2000"] = 0.25;
+    drag_coeffs["k3000"] = 0.25;
+    drag_coeffs["k4000"] = 0.25;
     // Hwoyee data just guesswork
-    cds["h100"] = 0.25;
-    cds["h200"] = 0.25;
-    cds["h300"] = 0.25;
-    cds["h350"] = 0.25;
-    cds["h400"] = 0.25;
-    cds["h500"] = 0.25;
-    cds["h600"] = 0.30;
-    cds["h750"] = 0.30;
-    cds["h800"] = 0.30;
-    cds["h950"] = 0.30;
-    cds["h1000"] = 0.30;
-    cds["h1200"] = 0.25;
-    cds["h1500"] = 0.25;
-    cds["h1600"] = 0.25;
-    cds["h2000"] = 0.25;
-    cds["h3000"] = 0.25;
+    drag_coeffs["h100"] = 0.25;
+    drag_coeffs["h200"] = 0.25;
+    drag_coeffs["h300"] = 0.25;
+    drag_coeffs["h350"] = 0.25;
+    drag_coeffs["h400"] = 0.25;
+    drag_coeffs["h500"] = 0.25;
+    drag_coeffs["h600"] = 0.30;
+    drag_coeffs["h750"] = 0.30;
+    drag_coeffs["h800"] = 0.30;
+    drag_coeffs["h950"] = 0.30;
+    drag_coeffs["h1000"] = 0.30;
+    drag_coeffs["h1200"] = 0.25;
+    drag_coeffs["h1500"] = 0.25;
+    drag_coeffs["h1600"] = 0.25;
+    drag_coeffs["h2000"] = 0.25;
+    drag_coeffs["h3000"] = 0.25;
     // PAWAN data also guesswork
-    cds["p100"] = 0.25;
-    cds["p350"] = 0.25;
-    cds["p600"] = 0.3;
-    cds["p800"] = 0.3;
-    cds["p900"] = 0.3;
-    cds["p1200"] = 0.25;
-    cds["p1600"] = 0.25;
-    cds["p2000"] = 0.25;
+    drag_coeffs["p100"] = 0.25;
+    drag_coeffs["p350"] = 0.25;
+    drag_coeffs["p600"] = 0.3;
+    drag_coeffs["p800"] = 0.3;
+    drag_coeffs["p900"] = 0.3;
+    drag_coeffs["p1200"] = 0.25;
+    drag_coeffs["p1600"] = 0.25;
+    drag_coeffs["p2000"] = 0.25;
 
-    var cd;
+    var drag_coeff;
 
-    if($('#cd_c:checked').length){ 
-        cd = get_value('cd');
+    if($('#drag_coeff_c:checked').length){ 
+        drag_coeff = get_value('drag_coeff');
     } else {
-        cd = cds[$('#mb').val()];
-        // Write data back into cd field.
-        $('#cd').val(cd.toFixed(2));
+        drag_coeff = drag_coeffs[$('#mb').val()];
+        // Write data back into drag_coeff field.
+        $('#drag_coeff').val(drag_coeff.toFixed(2));
     }
-    return cd;
+    return drag_coeff;
 }
 
 function calc_update() {
@@ -299,9 +299,9 @@ function calc_update() {
     var adm = get_value('adm');
     var gravity_accel = get_value('gravity_accel');
     var burst_diameter = find_burst_diameter(mb);
-    var cd = find_cd(mb);
+    var drag_coeff = find_drag_coeff(mb);
 
-    if(sanity_check_constants(rho_gas, rho_air, adm, gravity_accel, burst_diameter, cd))
+    if(sanity_check_constants(rho_gas, rho_air, adm, gravity_accel, burst_diameter, drag_coeff))
         return;
 
     // Do some maths
@@ -322,7 +322,7 @@ function calc_update() {
         launch_radius = Math.pow((3*launch_volume)/(4*Math.PI), (1/3));
     } else if(target_ascent_rate_set) {
         var a = gravity_accel * (rho_air - rho_gas) * (4.0 / 3.0) * Math.PI;
-        var b = -0.5 * Math.pow(target_ascent_rate, 2) * cd * rho_air * Math.PI;
+        var b = -0.5 * Math.pow(target_ascent_rate, 2) * drag_coeff * rho_air * Math.PI;
         var c = 0;
         var d = - (mp + mb) * gravity_accel;
 
@@ -348,7 +348,7 @@ function calc_update() {
     neck_lift = (gross_lift - mb) * 1000;
     var total_mass = mp + mb;
     var free_lift = (gross_lift - total_mass) * gravity_accel;
-    ascent_rate = Math.sqrt(free_lift / (0.5 * cd * launch_area * rho_air));
+    ascent_rate = Math.sqrt(free_lift / (0.5 * drag_coeff * launch_area * rho_air));
     var volume_ratio = launch_volume / burst_volume;
     burst_altitude = -(adm) * Math.log(volume_ratio);
     time_to_burst = (burst_altitude / ascent_rate) / 60.0;
@@ -486,16 +486,16 @@ $(document).ready(function() {
     });
 
     // enable disabled constants
-    $('#burst_diameter_c, #cd_c').click(function() {
+    $('#burst_diameter_c, #drag_coeff_c').click(function() {
         if($('#burst_diameter_c:checked').length) $('#burst_diameter').removeAttr('disabled');
         else $('#burst_diameter').attr('disabled', 'disabled');
 
-        if($('#cd_c:checked').length) $('#cd').removeAttr('disabled');
-        else $('#cd').attr('disabled', 'disabled');
+        if($('#drag_coeff_c:checked').length) $('#drag_coeff').removeAttr('disabled');
+        else $('#drag_coeff').attr('disabled', 'disabled');
     });
 
     // calculate result on change
-    var ids = ['mb', 'mp', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_gas', 'rho_air', 'adm', 'burst_diameter', 'cd', 'burst_diameter_c', 'cd_c', 'gravity_accel'];
+    var ids = ['mb', 'mp', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_gas', 'rho_air', 'adm', 'burst_diameter', 'drag_coeff', 'burst_diameter_c', 'drag_coeff_c', 'gravity_accel'];
 
     $('#' + ids.join(", #")).bind('keyup change',function() {
         calc_update();
