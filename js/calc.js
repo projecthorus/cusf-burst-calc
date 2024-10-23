@@ -353,7 +353,7 @@ function calc_update() {
     ascent_rate = Math.sqrt(free_lift / (0.5 * drag_coeff * launch_area * rho_air));
     var volume_ratio = launch_volume / burst_volume;
     burst_altitude = -(adm) * Math.log(volume_ratio);
-    time_to_burst = (burst_altitude / ascent_rate) / 60.0;
+    time_to_burst = burst_altitude / ascent_rate;
 
     if(isNaN(ascent_rate)) {
         set_error('target_burst_altitude', "Altitude unreachable for this configuration.");
@@ -366,7 +366,7 @@ function calc_update() {
 
     ascent_rate = ascent_rate.toFixed(2);
     burst_altitude = burst_altitude.toFixed();
-    time_to_burst = time_to_burst.toFixed();
+    time_to_burst_minutes = (time_to_burst / 60.0).toFixed();
     neck_lift = neck_lift.toFixed();
     launch_litres = (launch_volume * 1000).toFixed();
     launch_cf = (launch_volume * 35.31).toFixed(1);
@@ -374,7 +374,7 @@ function calc_update() {
 
     document.getElementById('ascent_rate').innerHTML = ascent_rate + " m/s";
     document.getElementById('burst_altitude').innerHTML = burst_altitude + " m";
-    document.getElementById('ttb').innerHTML = time_to_burst + " min";
+    document.getElementById('time_to_burst').innerHTML = time_to_burst_minutes + " min";
     document.getElementById('nl').innerHTML = neck_lift + " g";
     document.getElementById('lv_m3').innerHTML = launch_volume + " m<sup>3</sup>";
     document.getElementById('lv_l').innerHTML = launch_litres + " L";
