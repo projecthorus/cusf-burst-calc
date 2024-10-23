@@ -34,22 +34,22 @@ function set_warning(id, text) {
     text = "Result (" + text + ")";
     $("#result").addClass('warning').text(text);
 }
-function sanity_check_inputs(mb, mp, mp_set, tar, tba, tar_set, tba_set) {
-    if(tar_set && tba_set) {
-        set_error('tar', "Specify either target burst altitude or target ascent rate!");
+function sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, tba, target_ascent_rate_set, tba_set) {
+    if(target_ascent_rate_set && tba_set) {
+        set_error('target_ascent_rate', "Specify either target burst altitude or target ascent rate!");
         set_error('tba', "Specify either target burst altitude or target ascent rate!");
         return 1;
-    } else if(!tar_set && !tba_set) {
-        set_error('tar', "Must specify at least one target!");
+    } else if(!target_ascent_rate_set && !tba_set) {
+        set_error('target_ascent_rate', "Must specify at least one target!");
         set_error('tba', "Must specify at least one target!");
         return 1;
     }
 
-    if(tar_set && tar < 0) {
-        set_error('tar', "Target ascent rate can't be negative!");
+    if(target_ascent_rate_set && target_ascent_rate < 0) {
+        set_error('target_ascent_rate', "Target ascent rate can't be negative!");
         return 1;
-    } else if(tar_set && tar > 10) {
-        set_error('tar', "Target ascent rate is too large! (more than 10m/s)");
+    } else if(target_ascent_rate_set && target_ascent_rate > 10) {
+        set_error('target_ascent_rate', "Target ascent rate is too large! (more than 10m/s)");
         return 1;
     }
 
@@ -277,20 +277,20 @@ function calc_update() {
     // Get input values and check them
     var mb = document.getElementById('mb').value;
     var mp = get_value('mp');
-    var tar = get_value('tar');
+    var target_ascent_rate = get_value('target_ascent_rate');
     var tba = get_value('tba');
     var mp_set = 0;
-    var tar_set = 0;
+    var target_ascent_rate_set = 0;
     var tba_set = 0;
 
     if(document.getElementById('mp').value)
         mp_set = 1;
-    if(document.getElementById('tar').value)
-        tar_set = 1;
+    if(document.getElementById('target_ascent_rate').value)
+        target_ascent_rate_set = 1;
     if(document.getElementById('tba').value)
         tba_set = 1;
 
-    if(sanity_check_inputs(mb, mp, mp_set, tar, tba, tar_set, tba_set))
+    if(sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, tba, target_ascent_rate_set, tba_set))
         return;
 
     // Get constants and check them
@@ -320,9 +320,9 @@ function calc_update() {
     if(tba_set) {
         launch_volume = burst_volume * Math.exp((-tba) / adm);
         launch_radius = Math.pow((3*launch_volume)/(4*Math.PI), (1/3));
-    } else if(tar_set) {
+    } else if(target_ascent_rate_set) {
         var a = ga * (rho_a - rho_g) * (4.0 / 3.0) * Math.PI;
-        var b = -0.5 * Math.pow(tar, 2) * cd * rho_a * Math.PI;
+        var b = -0.5 * Math.pow(target_ascent_rate, 2) * cd * rho_a * Math.PI;
         var c = 0;
         var d = - (mp + mb) * ga;
 
@@ -495,7 +495,7 @@ $(document).ready(function() {
     });
 
     // calculate result on change
-    var ids = ['mb', 'mp', 'tar', 'tba', 'gas', 'rho_g', 'rho_a', 'adm', 'bd', 'cd', 'bd_c', 'cd_c', 'ga'];
+    var ids = ['mb', 'mp', 'target_ascent_rate', 'tba', 'gas', 'rho_g', 'rho_a', 'adm', 'bd', 'cd', 'bd_c', 'cd_c', 'ga'];
 
     $('#' + ids.join(", #")).bind('keyup change',function() {
         calc_update();
