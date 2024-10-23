@@ -372,7 +372,7 @@ function calc_update() {
     launch_cf = (launch_volume * 35.31).toFixed(1);
     launch_volume = launch_volume.toFixed(2);
 
-    document.getElementById('ar').innerHTML = ascent_rate + " m/s";
+    document.getElementById('ascent_rate').innerHTML = ascent_rate + " m/s";
     document.getElementById('burst_altitude').innerHTML = burst_altitude + " m";
     document.getElementById('ttb').innerHTML = time_to_burst + " min";
     document.getElementById('nl').innerHTML = neck_lift + " g";
