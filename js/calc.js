@@ -77,17 +77,17 @@ function sanity_check_inputs(mb, mp, mp_set, target_ascent_rate, target_burst_al
 
 }
 
-function sanity_check_constants(rho_g, rho_air, adm, ga, burst_diameter, cd) {
+function sanity_check_constants(rho_gas, rho_air, adm, ga, burst_diameter, cd) {
     if(!rho_air || rho_air < 0) {
         set_error('rho_air',"You need to specify a valid air density. (0<Ad)");
         return 1;
     }
-    if(!rho_g || rho_g < 0) {
-        set_error('rho_g',"You need to specify a valid gas density. (0<Gd)");
+    if(!rho_gas || rho_gas < 0) {
+        set_error('rho_gas',"You need to specify a valid gas density. (0<Gd)");
         return 1;
     }
-    if(rho_g > rho_air) {
-        set_error('rho_g',"Air density is less the gas density.");
+    if(rho_gas > rho_air) {
+        set_error('rho_gas',"Air density is less the gas density.");
         return 1;
     }
     if(!adm || adm < 0) {
@@ -110,38 +110,38 @@ function sanity_check_constants(rho_g, rho_air, adm, ga, burst_diameter, cd) {
     return 0;
 }
 
-function find_rho_g() {
+function find_rho_gas() {
     var gas = document.getElementById('gas').value;
-    var rho_g;
+    var rho_gas;
 
     switch(gas) {
         case 'he':
-            rho_g = 0.1786;
-            document.getElementById('rho_g').value = rho_g;
-            document.getElementById('rho_g').disabled = "disabled";
+            rho_gas = 0.1786;
+            document.getElementById('rho_gas').value = rho_gas;
+            document.getElementById('rho_gas').disabled = "disabled";
             break;
         case 'h':
-            rho_g = 0.0899;
-            document.getElementById('rho_g').value = rho_g;
-            document.getElementById('rho_g').disabled = "disabled";
+            rho_gas = 0.0899;
+            document.getElementById('rho_gas').value = rho_gas;
+            document.getElementById('rho_gas').disabled = "disabled";
             break;
         case 'ch4':
-            rho_g = 0.6672;
-            document.getElementById('rho_g').value = rho_g;
-            document.getElementById('rho_g').disabled = "disabled";
+            rho_gas = 0.6672;
+            document.getElementById('rho_gas').value = rho_gas;
+            document.getElementById('rho_gas').disabled = "disabled";
             break;
         case 'boc':
-            rho_g = 0.21076;
-            document.getElementById('rho_g').value = rho_g;
-            document.getElementById('rho_g').disabled = "disabled";
+            rho_gas = 0.21076;
+            document.getElementById('rho_gas').value = rho_gas;
+            document.getElementById('rho_gas').disabled = "disabled";
             break;
         default:
-            document.getElementById('rho_g').disabled = "";
-            rho_g = get_value('rho_g');
+            document.getElementById('rho_gas').disabled = "";
+            rho_gas = get_value('rho_gas');
             break;
     }
 
-    return rho_g;
+    return rho_gas;
 }
 
 function find_burst_diameter(mb) {
@@ -294,14 +294,14 @@ function calc_update() {
         return;
 
     // Get constants and check them
-    var rho_g = find_rho_g();
+    var rho_gas = find_rho_gas();
     var rho_air = get_value('rho_air');
     var adm = get_value('adm');
     var ga = get_value('ga');
     var burst_diameter = find_burst_diameter(mb);
     var cd = find_cd(mb);
 
-    if(sanity_check_constants(rho_g, rho_air, adm, ga, burst_diameter, cd))
+    if(sanity_check_constants(rho_gas, rho_air, adm, ga, burst_diameter, cd))
         return;
 
     // Do some maths
@@ -321,7 +321,7 @@ function calc_update() {
         launch_volume = burst_volume * Math.exp((-target_burst_altitude) / adm);
         launch_radius = Math.pow((3*launch_volume)/(4*Math.PI), (1/3));
     } else if(target_ascent_rate_set) {
-        var a = ga * (rho_air - rho_g) * (4.0 / 3.0) * Math.PI;
+        var a = ga * (rho_air - rho_gas) * (4.0 / 3.0) * Math.PI;
         var b = -0.5 * Math.pow(target_ascent_rate, 2) * cd * rho_air * Math.PI;
         var c = 0;
         var d = - (mp + mb) * ga;
@@ -343,7 +343,7 @@ function calc_update() {
 
     var launch_area = Math.PI * Math.pow(launch_radius, 2);
     var launch_volume = (4.0/3.0) * Math.PI * Math.pow(launch_radius, 3);
-    var density_difference = rho_air - rho_g;
+    var density_difference = rho_air - rho_gas;
     var gross_lift = launch_volume * density_difference;
     neck_lift = (gross_lift - mb) * 1000;
     var total_mass = mp + mb;
@@ -495,7 +495,7 @@ $(document).ready(function() {
     });
 
     // calculate result on change
-    var ids = ['mb', 'mp', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_g', 'rho_air', 'adm', 'burst_diameter', 'cd', 'burst_diameter_c', 'cd_c', 'ga'];
+    var ids = ['mb', 'mp', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_gas', 'rho_air', 'adm', 'burst_diameter', 'cd', 'burst_diameter_c', 'cd_c', 'ga'];
 
     $('#' + ids.join(", #")).bind('keyup change',function() {
         calc_update();
