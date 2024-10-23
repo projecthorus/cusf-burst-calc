@@ -34,7 +34,7 @@ function set_warning(id, text) {
     text = "Result (" + text + ")";
     $("#result").addClass('warning').text(text);
 }
-function sanity_check_inputs(mb, payload_mass_g, payload_mass_set, target_ascent_rate, target_burst_altitude, target_ascent_rate_set, target_burst_altitude_set) {
+function sanity_check_inputs(balloon_model, payload_mass_g, payload_mass_set, target_ascent_rate, target_burst_altitude, target_ascent_rate_set, target_burst_altitude_set) {
     if(target_ascent_rate_set && target_burst_altitude_set) {
         set_error('target_ascent_rate', "Specify either target burst altitude or target ascent rate!");
         set_error('target_burst_altitude', "Specify either target burst altitude or target ascent rate!");
@@ -144,7 +144,7 @@ function find_rho_gas() {
     return rho_gas;
 }
 
-function find_burst_diameter(mb) {
+function find_burst_diameter(balloon_model) {
     var burst_diameters = new Array();
 
     // From Kaymont Totex Sounding Balloon Data
@@ -200,7 +200,7 @@ function find_burst_diameter(mb) {
     if($('#burst_diameter_c:checked').length){
         burst_diameter = get_value('burst_diameter');
     } else {
-        burst_diameter = burst_diameters[$('#mb').val()];
+        burst_diameter = burst_diameters[$('#balloon_model').val()];
         // Write data back into burst_diameter field.
         $('#burst_diameter').val(burst_diameter.toFixed(2));
     }
@@ -208,7 +208,7 @@ function find_burst_diameter(mb) {
     return burst_diameter;
 }
 
-function find_drag_coeff(mb) {
+function find_drag_coeff(balloon_model) {
     var drag_coeffs = new Array();
 
     // From Kaymont Totex Sounding Balloon Data
@@ -263,7 +263,7 @@ function find_drag_coeff(mb) {
     if($('#drag_coeff_c:checked').length){ 
         drag_coeff = get_value('drag_coeff');
     } else {
-        drag_coeff = drag_coeffs[$('#mb').val()];
+        drag_coeff = drag_coeffs[$('#balloon_model').val()];
         // Write data back into drag_coeff field.
         $('#drag_coeff').val(drag_coeff.toFixed(2));
     }
@@ -275,7 +275,7 @@ function calc_update() {
     clear_errors();
 
     // Get input values and check them
-    var mb = document.getElementById('mb').value;
+    var balloon_model = document.getElementById('balloon_model').value;
     var payload_mass_g = get_value('payload_mass_g');
     var target_ascent_rate = get_value('target_ascent_rate');
     var target_burst_altitude = get_value('target_burst_altitude');
@@ -290,7 +290,7 @@ function calc_update() {
     if(document.getElementById('target_burst_altitude').value)
         target_burst_altitude_set = 1;
 
-    if(sanity_check_inputs(mb, payload_mass_g, payload_mass_set, target_ascent_rate, target_burst_altitude, target_ascent_rate_set, target_burst_altitude_set))
+    if(sanity_check_inputs(balloon_model, payload_mass_g, payload_mass_set, target_ascent_rate, target_burst_altitude, target_ascent_rate_set, target_burst_altitude_set))
         return;
 
     // Get constants and check them
@@ -298,14 +298,15 @@ function calc_update() {
     var rho_air = get_value('rho_air');
     var adm = get_value('adm');
     var gravity_accel = get_value('gravity_accel');
-    var burst_diameter = find_burst_diameter(mb);
-    var drag_coeff = find_drag_coeff(mb);
+    var burst_diameter = find_burst_diameter(balloon_model);
+    var drag_coeff = find_drag_coeff(balloon_model);
 
     if(sanity_check_constants(rho_gas, rho_air, adm, gravity_accel, burst_diameter, drag_coeff))
         return;
 
     // Do some maths
-    mb = parseFloat(mb.substr(1)) / 1000.0;
+    // model name is one letter prefix then integer string in grams
+    balloon_mass = parseFloat(balloon_model.substr(1)) / 1000.0;
     payload_mass = payload_mass_g / 1000.0;
 
     var ascent_rate = 0;
@@ -324,7 +325,7 @@ function calc_update() {
         var a = gravity_accel * (rho_air - rho_gas) * (4.0 / 3.0) * Math.PI;
         var b = -0.5 * Math.pow(target_ascent_rate, 2) * drag_coeff * rho_air * Math.PI;
         var c = 0;
-        var d = - (payload_mass + mb) * gravity_accel;
+        var d = - (payload_mass + balloon_mass) * gravity_accel;
 
         var f = (((3*c)/a) - (Math.pow(b, 2) / Math.pow(a,2)) / 3.0);
         var g = (((2*Math.pow(b,3))/Math.pow(a,3)) -
@@ -345,8 +346,8 @@ function calc_update() {
     var launch_volume = (4.0/3.0) * Math.PI * Math.pow(launch_radius, 3);
     var density_difference = rho_air - rho_gas;
     var gross_lift = launch_volume * density_difference;
-    neck_lift = (gross_lift - mb) * 1000;
-    var total_mass = payload_mass + mb;
+    neck_lift = (gross_lift - balloon_mass) * 1000;
+    var total_mass = payload_mass + balloon_mass;
     var free_lift = (gross_lift - total_mass) * gravity_accel;
     ascent_rate = Math.sqrt(free_lift / (0.5 * drag_coeff * launch_area * rho_air));
     var volume_ratio = launch_volume / burst_volume;
@@ -495,7 +496,7 @@ $(document).ready(function() {
     });
 
     // calculate result on change
-    var ids = ['mb', 'payload_mass_g', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_gas', 'rho_air', 'adm', 'burst_diameter', 'drag_coeff', 'burst_diameter_c', 'drag_coeff_c', 'gravity_accel'];
+    var ids = ['balloon_model', 'payload_mass_g', 'target_ascent_rate', 'target_burst_altitude', 'gas', 'rho_gas', 'rho_air', 'adm', 'burst_diameter', 'drag_coeff', 'burst_diameter_c', 'drag_coeff_c', 'gravity_accel'];
 
     $('#' + ids.join(", #")).bind('keyup change',function() {
         calc_update();
