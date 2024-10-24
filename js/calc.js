@@ -309,14 +309,10 @@ function calc_update() {
     balloon_mass = parseFloat(balloon_model.substr(1)) / 1000.0;
     payload_mass = payload_mass_g / 1000.0;
 
-    var ascent_rate = 0;
-    var burst_altitude = 0;
-    var time_to_burst = 0;
-    var neck_lift = 0;
     var launch_radius = 0;
     var launch_volume = 0;
 
-    // volume of sphere is 4/3 * pi * r^3
+    // assuming a sphere, so the volume is 4/3 * pi * r^3
     var burst_volume = (4.0/3.0) * Math.PI * Math.pow(burst_diameter / 2.0, 3);
 
     if(target_burst_altitude_set) {
@@ -347,13 +343,13 @@ function calc_update() {
     var launch_volume = (4.0/3.0) * Math.PI * Math.pow(launch_radius, 3);
     var density_difference = rho_air - rho_gas;
     var gross_lift = launch_volume * density_difference;
-    neck_lift = gross_lift - balloon_mass;
+    var neck_lift = gross_lift - balloon_mass;
     var total_mass = payload_mass + balloon_mass;
     var free_lift = (gross_lift - total_mass) * gravity_accel;
-    ascent_rate = Math.sqrt(free_lift / (0.5 * drag_coeff * launch_area * rho_air));
+    var ascent_rate = Math.sqrt(free_lift / (0.5 * drag_coeff * launch_area * rho_air));
     var volume_ratio = launch_volume / burst_volume;
-    burst_altitude = -(adm) * Math.log(volume_ratio);
-    time_to_burst = burst_altitude / ascent_rate;
+    var burst_altitude = -(adm) * Math.log(volume_ratio);
+    var time_to_burst = burst_altitude / ascent_rate;
 
     if(isNaN(ascent_rate)) {
         set_error('target_burst_altitude', "Altitude unreachable for this configuration.");
