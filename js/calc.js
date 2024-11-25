@@ -170,21 +170,20 @@ function find_bd(mb) {
     // 100g Hwoyee Data from http://www.hwoyee.com/images.aspx?fatherId=11010101&msId=1101010101&title=0
     bds["h100"] = 2.00;
     // Hwoyee data from http://www.hwoyee.com/base.asp?ScClassid=521&id=521102
-    bds["h200"] = 3.00;
-    bds["h300"] = 3.80;
-    bds["h350"] = 4.10;
-    bds["h400"] = 4.50;
-    bds["h500"] = 5.00;
-    bds["h600"] = 5.80;
-    bds["h750"] = 6.50;
-    bds["h800"] = 6.80;
-    bds["h950"] = 7.20;
-    bds["h1000"] = 7.50;
-    bds["h1200"] = 8.50;
-    bds["h1500"] = 9.50;
-    bds["h1600"] = 10.50;
+    // Updated 2024-11 from https://www.hwoyee.com/weather-balloon-meteorological-balloon-for-weather-sounding-wind-or-cloud-detection-near-space-researchesgiant-round-balloons-huge-balloons-product/
+    bds["h200"] = 2.97;
+    bds["h300"] = 4.30;
+    bds["h350"] = 4.80;
+    bds["h500"] = 5.80;
+    bds["h600"] = 6.50;
+    bds["h750"] = 6.90;
+    bds["h800"] = 7.00;
+    bds["h1000"] = 8.00;
+    bds["h1200"] = 9.10;
+    bds["h1600"] = 10.00;
+    // These two are fudged a little
     bds["h2000"] = 11.00;
-    bds["h3000"] = 12.50;
+    bds["h3000"] = 12.00;
     // PAWAN data from
     // http://randomaerospace.com/Random_Aerospace/Balloons.html
     bds["p100"] = 1.6;
