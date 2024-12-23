@@ -125,9 +125,9 @@
                 <div class="five columns alpha grey float first">
                     <div class="sign"></div>
                     <h4>Payload Mass (g)</h4>
-                    <input type="text" id="mp" class="input_field numeric scrollable" value="1500" data-step="5" tabindex="1"/>
+                    <input type="text" id="payload_mass_g" class="input_field numeric scrollable" value="1500" data-step="5" tabindex="1"/>
                     <h4>Balloon Mass (g)</h4>
-                    <select class="input_field" id="mb" tabindex="2">
+                    <select class="input_field" id="balloon_model" tabindex="2">
                         <option value="k100">Kaymont - 100</option>
                         <option value="k150">Kaymont - 150</option>
                         <option value="k200">Kaymont - 200</option>
@@ -169,29 +169,29 @@
                 <div class="five columns alpha grey float second">
                     <div class="sign"></div>
                     <h4>Target Burst Altitude (m)</h4>
-                    <input type="text" id="tba" class="input_field numeric scrollable" data-step="100" value="33000" tabindex="3"/>
+                    <input type="text" id="target_burst_altitude" class="input_field numeric scrollable" data-step="100" value="33000" tabindex="3"/>
                     <h4>Target Ascent rate (m/s)</h4>
-                    <input type="text" id="tar" class="input_field numeric scrollable" data-step="0.1" tabindex="4"/>
+                    <input type="text" id="target_ascent_rate" class="input_field numeric scrollable" data-step="0.1" tabindex="4"/>
                 </div>
                 <div class="thirteen columns alpha grey third">
                     <h4 id="result">Result</h4>
                     <div class="three columns offset-by-one">
                         <span class="output_label">Burst Altitude:</span>
-                        <span class="output_data" id="ba">33000 m</span>
+                        <span class="output_data" id="burst_altitude">33000 m</span>
                         <span class="output_label">Ascent Rate:</span>
-                        <span class="output_data" id="ar">2.33 m/s</span>
+                        <span class="output_data" id="ascent_rate">2.33 m/s</span>
                     </div>
                     <div class="three columns offset-by-one">
                         <span class="output_label">Time to Burst:</span>
-                        <span class="output_data" id="ttb">238 min</span>
+                        <span class="output_data" id="time_to_burst">238 min</span>
                         <span class="output_label">Neck Lift:</span>
-                        <span class="output_data" id="nl">1733 g</span>
+                        <span class="output_data" id="neck_lift">1733 g</span>
                     </div>
                     <div class="three columns offset-by-one">
                         <span class="output_label">Volume:</span>
-                        <span class="output_data" id="lv_m3">2.66 m<sup>3</sup></span>
-                        <span class="output_label" id="lv_l" style="font-weight: bold;">2660 L</span>
-                        <span class="output_data" id="lv_cf">93.9 ft<sup>3</sup></span>
+                        <span class="output_data" id="launch_volume_m3">2.66 m<sup>3</sup></span>
+                        <span class="output_label" id="launch_volume_l" style="font-weight: bold;">2660 L</span>
+                        <span class="output_data" id="launch_volume_cf">93.9 ft<sup>3</sup></span>
                     </div>
                 </div>
                 <div class="thirteen columns alpha grey fourth closed">
@@ -205,24 +205,24 @@
                             <option value="boc">BOC Balloon Gas</option>
                             <option value="custom">Custom</option>
                         </select><br />
-                        <label class="constant_label" for="rho_g">Gas Density (kg/m<sup>3</sup>)</label><br />
-                        <input type="text" id="rho_g" value="0.1786" class="constant_field" size="9" disabled="disabled"/><br />
+                        <label class="constant_label" for="rho_gas">Gas Density (kg/m<sup>3</sup>)</label><br />
+                        <input type="text" id="rho_gas" value="0.1786" class="constant_field" size="9" disabled="disabled"/><br />
                     </div>
                     <div class="columns four" style="display: none">
-                        <label class="constant_label" for="rho_a">Air Density (kg/m<sup>3</sup>)</label><br />
-                        <input type="text" id="rho_a" value="1.2050" class="constant_field numeric" autocomplete="off" size="9"/><br />
+                        <label class="constant_label" for="rho_air">Air Density (kg/m<sup>3</sup>)</label><br />
+                        <input type="text" id="rho_air" value="1.2050" class="constant_field numeric" autocomplete="off" size="9"/><br />
                         <label class="constant_label" for="adm">Air Density Model</label><br />
                         <input type="text" id="adm" value="7238.3" class="constant_field numeric" autocomplete="off" size="9"/><br />
-                        <label class="constant_label" for="ga">Gravitational<br />Acceleration (m/s<sup>2</sup>)</label><br />
-                        <input type="text" id="ga" value="9.80665" class="constant_field numeric" autocomplete="off" size="9" /><br />
+                        <label class="constant_label" for="gravity_accel">Gravitational<br />Acceleration (m/s<sup>2</sup>)</label><br />
+                        <input type="text" id="gravity_accel" value="9.80665" class="constant_field numeric" autocomplete="off" size="9" /><br />
                     </div>
                     <div class="columns four omega" style="display: none">
-                        <input type="checkbox" class="float" id="bd_c" autocomplete="off" />
-                        <label class="constant_label" for="bd">Burst Diameter (m)</label><br />
-                        <input type="text" id="bd" class="constant_field numeric scrollable" data-step="0.2" disabled="disabled" value="7.86" autocomplete="off" /><br />
-                        <input type="checkbox" class="float" id="cd_c" autocomplete="off" />
-                        <label class="constant_label" for="cd">Balloon Cd</label><br />
-                        <input type="text" id="cd" class="constant_field numeric scrollable" data-step="0.05" data-max="1" disabled="disabled" value="0.3" autocomplete="off" /><br />
+                        <input type="checkbox" class="float" id="burst_diameter_c" autocomplete="off" />
+                        <label class="constant_label" for="burst_diameter">Burst Diameter (m)</label><br />
+                        <input type="text" id="burst_diameter" class="constant_field numeric scrollable" data-step="0.2" disabled="disabled" value="7.86" autocomplete="off" /><br />
+                        <input type="checkbox" class="float" id="drag_coeff_c" autocomplete="off" />
+                        <label class="constant_label" for="drag_coeff">Balloon Cd</label><br />
+                        <input type="text" id="drag_coeff" class="constant_field numeric scrollable" data-step="0.05" data-max="1" disabled="disabled" value="0.3" autocomplete="off" /><br />
                     </div>
                 </div>
             </div>
