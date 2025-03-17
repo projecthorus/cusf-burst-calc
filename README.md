@@ -7,9 +7,7 @@ pertaining to launching high altitude balloon missions.
 
 ### To install
 
-Standalone, just clone and init submodule
-
-    git submodule update --init
+Standalone, no installation needed.
 
 ### Author
 
